@@ -1,0 +1,280 @@
+cultivar.number	cultivar.name	subgroup.panel	code.intro	snp.imp.f.d.assign	snp.imp.f.d.assign.noNA
+1	Rivairenc = Aspiran noir	WW	1Mtp3	WW	WW
+9	Morrastel	WW	9Mtp3	WW	WW
+11	Piquepoul noir	WW	11Mtp3	WW	WW
+18	Carignan	WE	18Mtp8	WE	WE
+26	Clairette	WW	26Mtp2	WW	WW
+43	Olivette rose	TE	43Mtp1	TE	TE
+44	Alba imputotato	WE	44Mtp1	WE	WE
+50	Alfrocheiro preto	WW	50Mtp1	WW	WW
+53	Basicata	WE	2298Mtp2	WE	WE
+74	Ugni blanc	WE	74Mtp31	NA	WE
+80	Gros Bourgogne	WE	80Mtp1	WE	WE
+86	Tibouren	WW	86Mtp2	WW	WW
+114	Pagadebiti	WE	114Mtp4	WE	WE
+124	Riminèse	WE	124Mtp1	WE	WE
+126	Vassarga bielaia	TE	126Mtp2	TE	TE
+129	Chatus	WW	129Mtp12	WW	WW
+139	Dureza	WW	139Mtp1	WW	WW
+154	Joubertin	WW	154Mtp1	WW	WW
+157	Corbeau	WW	157Mtp3	WW	WW
+167	Altesse	WW	167Mtp12	WW	WW
+176	Mondeuse blanche	WW	176Mtp1	WW	WW
+188	Mècle	WW	188Mtp1	WW	WW
+203	Saint-Laurent	WW	203Mtp1	WW	WW
+211	Gouais blanc	WE	210Mtp1	WE	WE
+219	Arbane	WW	219Mtp2	WW	WW
+226	Gascon	WW	226Mtp7	WW	WW
+227	Roublot	WW	227Mtp1	WW	WW
+252	Poulsard	WW	252Mtp1	WW	WW
+257	Savagnin blanc	WW	257Mtp16	WW	WW
+261	Argant	WE	261Mtp2	WE	WE
+284	Roter Veltliner	WE	284Mtp4	WE	WE
+308	Muscat d'Alexandrie	TE	308Mtp9	TE	TE
+328	Petit Verdot	WW	328Mtp2	WW	WW
+329	Gheméra	WE	329Mtp1	WE	WE
+332	Semillon	WW	332Mtp1	WW	WW
+344	Blanc Auba	WW	344Mtp2	WW	WW
+349	Penouille	WW	349Mtp1	WW	WW
+361	Humagne blanc	WW	2066Mtp1	WW	WW
+372	Gibert	WW	372Mtp1	WW	WW
+380	Baroque	WW	380Mtp1	WW	WW
+390	Verdeca = Lagorthi	WE	2287Mtp1	WE	WE
+403	Aouillat	WW	403Mtp1	WW	WW
+411	Camaraou noir	WW	411Mtp1	WW	WW
+413	Courbu	WW	413Mtp1	WW	WW
+424	Lauzet	WW	424Mtp2	WW	WW
+442	Négret pounjut	WW	442Mtp2	WW	WW
+443	Mauzac	WW	443Mtp19	WW	WW
+446	Len de l'El	WW	446Mtp3	WW	WW
+537	Terret Bouschet	WW	537Mtp1	WW	WW
+556	Katta-kourgan	TE	556Mtp2	TE	TE
+569	Moscato giallo	WE	569Mtp1	WE	WE
+577	Moscato di Terracina	WE	577Mtp1	WE	WE
+585	Chasselas	WW	585Mtp62	WW	WW
+601	Aromriesling	WW	601Mtp1	WW	WW
+613	Kaisermuskat	WW	613Mtp1	WW	WW
+626	Akiki	TE	626Mtp1	TE	TE
+632	Frankenthal rouge foncé	TE	632Mtp2	WW	WW
+657	Khalili belyi	TE	657Mtp1	TE	TE
+666	Danugue	TE	666Mtp3	TE	TE
+672	Molinera gorda	TE	672Mtp2	TE	TE
+725	Kolliniatiko	WE	725Mtp1	WE	WE
+727	Nehelescol	TE	727Mtp1	TE	TE
+728	Darkaia noir	TE	629Mtp1	TE	TE
+735	Dabouki	TE	735Mtp1	TE	TE
+744	Kolontar	WE	744Mtp1	WE	WE
+746	Kizil sapak faux	TE	746Mtp1	TE	TE
+749	Coarna alba	WE	749Mtp2	WE	WE
+789	Genk Uzum	WE	789Mtp1	WE	WE
+791	Chaptal	TE	791Mtp1	TE	TE
+830	Salicette (Collection Parc de la Tête d'Or)	WW	830Mtp1	WW	WW
+975	Pardina = Pirovano 130	TE	975Mtp3	TE	TE
+1186	Chirai obak	TE	1186Mtp1	TE	TE
+1217	Claverie coulard	WW	1217Mtp1	WW	WW
+1218	Tavkveri	TE	1218Mtp1	TE	TE
+1221	Ichkimar	TE	1221Mtp2	TE	TE
+1227	Khoussaïné blanc	TE	1227Mtp2	TE	TE
+1232	Gros Cabernet	WW	1232Mtp2	WW	WW
+1237	Rossara	WE	1237Mtp1	WE	WE
+1245	Freisa	WW	1245Mtp1	WW	WW
+1258	Verdea	WE	1258Mtp1	WE	WE
+1261	Coda di volpe bianca	WE	1261Mtp1	WE	WE
+1266	Raboso piave	WW	1266Mtp2	WW	WW
+1277	Primitivo	WE	1277Mtp6	WE	WE
+1284	Montepulciano	WE	1284Mtp1	WE	WE
+1287	Lagrein	WW	1287Mtp2	WW	WW
+1301	Verdiso	WW	1301Mtp1	WW	WW
+1304	Catarratto bianco	WE	1303Mtp3	WE	WE
+1307	Ansonica	WE	1307Mtp1	TE	TE
+1314	Perricone	TE	1314Mtp1	WE	WE
+1338	Bellone	WE	1338Mtp1	WE	WE
+1354	Bonamico	WE	1354Mtp2	WE	WE
+1365	Ohanes	TE	1365Mtp5	TE	TE
+1367	Teta de Vaca	TE	1367Mtp1	TE	TE
+1483	Vinhão	WW	1483Mtp3	WW	WW
+1493	Touriga nacional	WW	1493Mtp1	WW	WW
+1494	Verdelho tinto femelle	WW	1494Mtp1	WW	WW
+1526	Ramisco	WW	0Mtp952	WW	WW
+1531	Carcajolo	WW	1531Mtp3	WW	WW
+1563	Ag isioum	TE	1563Mtp1	TE	TE
+1576	Heunisch schwarz	WW	1576Mtp2	WW	WW
+1578	Kövidinka	WE	1578Mtp2	WE	WE
+1583	Affenthaler	WW	1583Mtp3	WW	WW
+1620	Tantovina	WE	1620Mtp1	WE	WE
+1628	Dinka zöld	WE	1628Mtp3	WE	WE
+1629	Beregi rozsas	WE	1629Mtp1	WE	WE
+1631	Blank blauer	WE	1631Mtp1	WE	WE
+1636	Rudezusa	WE	1636Mtp1	WE	WE
+1648	Nincusa	WE	1648Mtp1	WE	WE
+1653	Ruzevina (Jelaska)	WE	1653Mtp1	WE	WE
+1654	Posip bijeli	WE	1654Mtp1	WE	WE
+1662	Rosa menna di vacca	WE	1662Mtp3	WE	WE
+1667	Negru virtos	WE	1667Mtp3	WE	WE
+1673	Chaouch blanc	TE	1673Mtp5	TE	TE
+1695	Assoued kere	TE	1695Mtp1	TE	TE
+1715	Kasoufi de la Bekaa	TE	1715Mtp1	TE	TE
+1719	Zeini abiad	TE	1248Mtp2	TE	TE
+1744	Chahnani	TE	1744Mtp1	TE	TE
+1753	Verico	TE	1753Mtp1	TE	TE
+1766	Baresana = Korithi aspro	TE	1247Mtp1	TE	TE
+1769	Opsimo Edessis	TE	2709Mtp1	TE	TE
+1784	Kartsiotis	WE	1784Mtp1	WE	WE
+1791	Avgoustiatis	WE	0Mtp64	WE	WE
+1797	Fokiano	WE	1797Mtp1	WE	WE
+1801	Skylopnichtis	WE	1801Mtp1	WE	WE
+1805	Araklinos	WE	1805Mtp1	WE	WE
+1814	Vidiano	WE	1814Mtp1	WE	WE
+1815	Tachtas	TE	1815Mtp1	TE	TE
+1827	Mission	WE	1827Mtp1	WE	WE
+1837	Arvine	WW	1837Mtp4	WW	WW
+1844	Malvasia istriana	WE	1844Mtp2	WE	WE
+1887	Razachie rosie	WE	433Mtp1	WE	WE
+1888	Balbut bijeli	WE	1888Mtp1	WE	WE
+1893	Hadari	TE	1893Mtp1	TE	TE
+1909	Bou Khanzir noir	TE	1909Mtp1	TE	TE
+1972	Garrido macho	TE	1972Mtp1	TE	TE
+1992	Abouhou	TE	1992Mtp1	TE	TE
+2003	Azizi el Jaïa	TE	2003Mtp1	TE	TE
+2013	Khalt	TE	2013Mtp1	TE	TE
+2043	Bianco d'Alessano	WE	2043Mtp1	WE	WE
+2057	Impigno	WE	2057Mtp1	WE	WE
+2070	Cacaboué	WW	2070Mtp2	WW	WW
+2074	Siah	TE	2074Mtp1	TE	TE
+2104	Bogazkere	TE	2104Mtp1	TE	TE
+2107	Dimrit	WE	2107Mtp1	WE	WE
+2112	Razdani	TE	2112Mtp1	TE	TE
+2136	Galbena de Odobesti	WE	2136Mtp2	WE	WE
+2174	Pozsonyi feher	WE	2174Mtp1	WE	WE
+2218	Avarengo	WW	2218Mtp1	WW	WW
+2243	Crimposie	WE	2243Mtp4	WE	WE
+2247	Feteasca regala	WE	2247Mtp2	WE	WE
+2279	Khikhvi	TE	0Mtp581	TE	TE
+2281	Aetonychi lefko	TE	2281Mtp1	NA	TE
+2282	July Muscat	TE	2282Mtp2	TE	TE
+2304	Platyracho	WE	2304Mtp1	WE	WE
+2305	Plyto	TE	0Mtp886	WE	WE
+2316	Skiadopoulo	WE	0Mtp1068	WE	WE
+2317	Staphidampelo	WE	2317Mtp1	WE	WE
+2318	Strophyliatico	WE	2318Mtp1	WE	WE
+2327	Breider 5-6	WW	2327Mtp1	WW	WW
+2342	Albaranzeuli bianco	WE	2342Mtp1	WE	WE
+2348	Cococciola	WE	2348Mtp1	WE	WE
+2349	Lambrusco Marani	WW	2349Mtp1	WW	WW
+2371	Fumin	WW	2371Mtp1	WW	WW
+2373	Greco bianco	WE	2373Mtp1	WE	WE
+2418	Vermentino nero	WE	2418Mtp1	WE	WE
+2460	Negru mare	TE	2460Mtp2	TE	TE
+2471	Tsitsa Kaprei	TE	2471Mtp1	TE	TE
+2472	Galbena uriasa	WE	2472Mtp1	WE	WE
+2500	Alexandroouli	TE	2500Mtp1	TE	TE
+2503	Arakseni tcherni	TE	2503Mtp1	TE	TE
+2505	Assyl kara	TE	2505Mtp1	TE	TE
+2543	Maingonnat 3 L 1	WE	2543Mtp1	WE	WE
+2597	Peikani	TE	2597Mtp1	TE	TE
+2621	Nieddera	WE	2621Mtp2	WE	WE
+2628	Ahmar Derani	TE	848Mtp1	TE	TE
+2635	Koz ouzioum	TE	2635Mtp1	TE	TE
+2644	Mskhali	TE	2644Mtp1	TE	TE
+2655	Sapéré otskhanouri faux	TE	2655Mtp1	TE	TE
+2657	Soïaki	TE	2657Mtp1	TE	TE
+2659	Tagobi	TE	2659Mtp1	TE	TE
+2665	Tzimliansky belyi	WE	0Mtp1235	WE	WE
+2683	Sorok Let Oktiabria	WE	2683Mtp1	WE	WE
+2694	Landroter = Cornalin du Valais	WW	2694Mtp1	WW	WW
+2708	Emerald seedless	TE	2708Mtp1	TE	TE
+2713	Mireille	WW	2713Mtp1	WW	WW
+2725	Bacchus = Geilweilerhof 33-29-133	WW	2725Mtp1	WW	WW
+2745	Heroldrebe = We S 130	WE	2745Mtp1	WE	WE
+2747	Arinarnoa	WW	2747Mtp1	WW	WW
+2774	Sultanina de Bulgarie	TE	2774Mtp1	TE	TE
+2808	Lisztes feher	WE	1570Mtp1	WE	WE
+2842	Ag Kiourdach faux (Collection Kichinev)	TE	2842Mtp1	TE	TE
+2844	Lialmigui	TE	2844Mtp1	TE	TE
+2856	Sourkhak biely	TE	2856Mtp1	TE	TE
+2874	Centennial seedless	TE	2874Mtp2	TE	TE
+2890	Baserri	WW	2890Mtp1	WW	WW
+2892	Donzelinho branco	WW	2892Mtp1	WW	WW
+2902	Gantziandan	TE	2902Mtp1	TE	TE
+2903	Hunisa	TE	635Mtp1	TE	TE
+2942	Completer	WW	2886Mtp1	WW	WW
+2944	Autumn seedless	TE	2893Mtp2	TE	TE
+2953	Labrusco	WW	2953Mtp1	WW	WW
+2968	Mourtaou	WW	2968Mtp1	WW	WW
+2972	Codivarta	WE	2972Mtp1	WE	WE
+2982	Ahmeh Sal apyrène	TE	2982Mtp1	TE	TE
+2991	Achlamiche	TE	2991Mtp1	TE	TE
+2995	Asswad Abou Khislé	TE	2995Mtp1	TE	TE
+3000	Zakynthino	WE	3000Mtp1	WE	WE
+3005	Attiki	TE	3005Mtp1	TE	TE
+3009	Balsamina (Collection Oberlin)	WW	3009Mtp1	WW	WW
+3016	Massirart	WW	3016Mtp1	WW	WW
+3057	Pasiga = CG 26-858	TE	0Mtp1480	TE	TE
+3061	Big Perlon = CG 234-250 = XE 3	TE	0Mtp1650	TE	TE
+3082	Plant de Chaudefonds 53 (Fardeau)	WW	0Mtp1512	WW	WW
+3090	Plant de Ponteilla (Jaubert)	WE	0Mtp500	WE	WE
+3093	Cahours	WW	0Mtp171	WW	WW
+3099	Plant de Pedebernade 1	WW	0Mtp1293	WW	WW
+3112	Grain	WW	0Mtp1513	WW	WW
+3148	Corason de Kabritte blanc	WW	0Mtp270	WW	WW
+3151	Doppel Augen	TE	0Mtp318	TE	TE
+3159	Dili kaftar	TE	0Mtp300	TE	TE
+3160	Koutlaksky belyi	TE	0Mtp1474	TE	TE
+3164	Mourvèdre Goulé	WE	0Mtp406	WW	WW
+3167	Kakotryghis	WE	0Mtp562	WE	WE
+3176	Nero grosso	TE	0Mtp796	TE	TE
+3181	Casetta	WW	0Mtp633	WW	WW
+3184	Garbanega faux (Istituto San Michele)	TE	0Mtp408	WW	WW
+3205	Verdelho tinto	WW	0Mtp1176	WW	WW
+3216	Gharbi	TE	0Mtp416	TE	TE
+3221	Chami abiad	TE	0Mtp220	TE	TE
+3224	Graeco	TE	0Mtp440	TE	TE
+3236	C 50-171 (Ramming)	TE	0Mtp166	TE	TE
+3240	Öküz gözü faux	TE	0Mtp832	TE	TE
+3262	Asma	TE	0Mtp811	TE	TE
+3264	Kichmich tcherni	TE	0Mtp1491	TE	TE
+3281	Variété d'oasis Bou Chemma 46	TE	0Mtp1557	TE	TE
+3287	Kara oglan faux	WE	0Mtp569	WE	WE
+3296	Fortunato	TE	0Mtp1733	TE	TE
+3308	Plant de Vic 98-N-3 (Collection Torres S.A.)	WW	0Mtp1724	WE	WE
+3310	Ribote rose	WE	0Mtp961	WE	WE
+3316	Caprugnone	WE	0Mtp1761	WE	WE
+3341	Korza erevani	TE	0Mtp610	TE	TE
+3346	Starinky	WE	0Mtp1073	WE	WE
+3353	Matrassa blanc faux	TE	0Mtp703	TE	TE
+3364	Arinto tinto (Collection Soares Franco)	WW	0Mtp36	WW	WW
+3366	Nevoeira	WW	0Mtp799	WW	WW
+3372	Souzao faux	WW	0Mtp1072	WW	WW
+3376	Pero Godal	WW	0Mtp875	WW	WW
+3379	Castañal	WW	0Mtp752	WW	WW
+3380	Lameiro	WW	0Mtp636	WW	WW
+3381	Medouar	TE	0Mtp715	TE	TE
+3391	Stavroto faux (Collection Lykovrissi)	WE	0Mtp1074	WE	WE
+3403	Rosaky rose faux	WE	0Mtp982	WE	WE
+3412	Morenzi	WE	0Mtp1553	WE	WE
+3420	Muscate (Collection Ravaz)	WE	0Mtp775	WE	WE
+3427	Vulpea faux (Collection Ravaz)	WE	0Mtp1213	WE	WE
+3433	Kolossié gebirgig	TE	0Mtp604	TE	TE
+3444	Hagnos Zöld	WE	0Mtp469	WE	WE
+3448	Öreg Kadarka	WE	0Mtp561	WE	WE
+3455	Totika	WE	0Mtp1129	WE	WE
+3456	Urmi dinka	WE	0Mtp1156	WE	WE
+3464	Domina = Geilweilerhof 4-25-7	WW	0Mtp313	WW	WW
+3471	Osteiner	WW	0Mtp835	WW	WW
+3480	Urbanitraube noir (Collection Oberlin)	WE	0Mtp1154	WE	WE
+3481	Wildbacher de Hongrie (Collection Ravaz)	WW	0Mtp1218	WW	WW
+3484	Galotta	WW	0Mtp1747	WW	WW
+3499	Belle Denise	WW	0Mtp89	WW	WW
+3509	Grosse Mérille	WW	0Mtp537	WW	WW
+3516	Magdeleine noire des Charentes	WW	0Mtp1195	WW	WW
+3521	Morenoa	WW	0Mtp739	WW	WW
+3551	Roussette basse de Seyssel	WW	0Mtp995	WW	WW
+3568	Canella	WE	0Mtp1758	WE	WE
+3575	San Lorenzo	WW	0Mtp1004	WW	WW
+3591	Sao Mamede	WW	0Mtp1005	WW	WW
+3602	Barlinka faux (Almeria)	TE	2225Mtp5	TE	TE
+3617	B 40-97 (Ramming)	TE	0Mtp1676	TE	TE
+3636	Sasca (Collection Ravaz)	WE	0Mtp1033	WE	WE
+3639	Okatac faux	WE	0Mtp831	WE	WE
+3657	Angoor Kalan	TE	0Mtp29	TE	TE
+3746	Babica crna	WE	1644Mtp1	WE	WE

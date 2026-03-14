@@ -1,0 +1,604 @@
+---
+title: "Vignette: IGEs through the lens of neighbor genotypic identity"
+author: 
+  - Yasuhiro Sato ^[Faculty of Environmental Earth Science, Hokkaido University (email:yassato@ees.hokudai.ac.jp)]
+  - Kosuke Hamazaki ^[XX, YY (email:hamazaki@ut-biomet.org)]
+output: rmdformats::readthedown
+---
+
+-----
+
+# Background
+Indirect genetic effects (IGEs) are ubiquitous in nature and agriculture. To enable genome-wide association study (GWAS) and genomic prediction (GP) of IGEs, we have developed a multi-kernel mixed model incorporating neighbor genotypes. This offers flexible implementation of multiple models as follows
+
+### Model 1-1: Original Neighbor GWAS model
+The first model corresponds to the original model of Neighbor GWAS (Sato et al. 2021), which explains the trait of $i$-th individual within a local space $k$, $y_{k_i}$, by own genetic effects at $q$-th SNP marker $x_{q,k_i}$ and its mean similarity with $j$-th neighboring individual ($x_{q,k_i} x_{q,k_j})$ over total $J$ neighbors as follows.
+
+$$y_{k_i} = \beta_0 + \beta_1 x_{q,k_i} + \beta_2 \sum_{k_j=1}^{J_k}{(x_{q,k_i} x_{q,k_j})}/J + u_{k_i} + e_{k_i}~~~\text{(Eq. 1-1a)}$$
+where $\beta_1$ and $\beta_2$ indicate self and neighbor genotypic effects, respectively. $\beta_0$, $u_{k_i}$, and $e_{k_i}$ indicate the intercept, random effects, and residuals. Eq. 1-1a is also expressed as follows.
+
+$$\mathbf{y} = \mathbf{X}_0\mathbf{\beta}_{0} + \mathbf{X}_\text{1}\mathbf{\beta}_\text{1} + \mathbf{X}_\text{2}\mathbf{\beta}_\text{2} + \mathbf{Z}\mathbf{u} + \mathbf{e}~~~\text{(Eq. 1-1b)}$$
+
+where the random effects constitute additive effects from self and neighbor genotypes as $\mathbf{u} \sim N(\mathbf{0},\sigma^2_1\mathbf{K}_1+\sigma^2_2\mathbf{K}_2)$. The former kernel $\mathbf{K}_1$ is the ordinal genomic relatedness matrix (GRM), while the latter kernel $\mathbf{K}_2 = \mathbf{X}_\text{2}\mathbf{X}_\text{2}^\mathsf{T}$ represents global allelic similarity whose elements are defined as $(\mathbf{K}_{2})_{k,l} = \sum_{q=1}^Q[(x_{q,k_i}x_{q,l_i}){\sum_{j=1}^{J_k}(x_{q,k_j})\sum_{j=1}^{J_l}(x_{q,l_j})}]/(Q-1)$ between local spaces $k$ and $l$.   
+
+### Model 1-2: The proposed joint model
+The second model extends the first model to incorporate covariance between self and neighbor genotypic effects, which enables joint modeling of polygenic and oligogenic IGEs.  
+
+$$y_{k_i} = \beta_{q,0} + \beta_{q,1} x_{q,k_i} + \beta_{q,12} \sum_{j_k=1}^{J_k}{x_{q,k_j}}/J_k + \beta_{q,2} \sum_{k_j=1}^J{(x_{q,k_i} x_{q,k_j})}/J_k + u_{k_i,1} + u_{k_i,2} + e_{k_i}$$
+
+or
+
+$$\mathbf{y} = \mathbf{X}_0\mathbf{\beta}_{0} + \mathbf{X}_1\mathbf{\beta}_{1} + \mathbf{X}_2\mathbf{\beta}_{2} + \mathbf{X}_{12}\mathbf{\beta}_{12} + \mathbf{Z}\mathbf{u}_1 + \mathbf{Z}\mathbf{u}_2 + \mathbf{e}$$
+
+where
+
+$$\left(\begin{array}{c}
+  \mathbf{u}_1 \\
+  \mathbf{u}_2
+  \end{array} \right) \sim \text{MVN} [
+  \left(\begin{array}{c}
+  \mathbf{0} \\
+  \mathbf{0}
+  \end{array} \right),
+  \left(\begin{array}{cc}
+  \sigma^2_1 \mathbf{K}_\text{1} &  \rho_{12}\sigma_1\sigma_2 \mathbf{K}_\text{12} \\ 
+  \rho_{12}\sigma_1\sigma_2 \mathbf{K}_\text{21} &  \sigma^2_2 \mathbf{K}_\text{2}
+  \end{array} \right) ]~~~\text{(Eq. 1).}$$
+
+The random effects follow a multi-variate normal (MVN) distribution that considers the covariance $\rho_{12}\sigma_1\sigma_2$ between DGEs and IGEs. The off-diagonal kernels $\mathbf{K}_\text{12} = \mathbf{X}_1\mathbf{X}_2^\mathsf{T}$ and $\mathbf{K}_\text{21}=\mathbf{X}_2\mathbf{X}_1^\mathsf{T}$ represent asymmetric effects from one allele to another in a neighborhood.   
+
+### Model 2-1: Conventional IGE model (w/o cov)
+
+Conventional IGE models can be implemented using `RAINBOWR` package. The third model corresponds to those without DGE-IGE covariance.
+
+$$\mathbf{y} = \mathbf{X}_0\mathbf{\beta}_{0} + \mathbf{Z}_1\mathbf{u}_1 + \mathbf{Z}_2\mathbf{u}_2 + \mathbf{e}$$
+
+where
+
+$$\left(\begin{array}{c}
+  \mathbf{u}_1 \\
+  \mathbf{u}_2
+  \end{array} \right) \sim \text{MVN} [
+  \left(\begin{array}{c}
+  \mathbf{0} \\
+  \mathbf{0}
+  \end{array} \right),
+  \left(\begin{array}{cc}
+  \sigma^2_1 &  0 \\ 
+  0 &  \sigma^2_2 
+  \end{array} \right) \otimes \mathbf{K}_\text{1} ]~~~\text{(Eq. 2-2).}$$
+
+
+
+### Model 2-2: Conventional IGE model (w/ cov)
+The fourth model corresponds to a conventional IGE model with DGE-IGE covariance.
+
+$$\mathbf{y} = \mathbf{X}_0\mathbf{\beta}_{0} + \mathbf{Z}_1\mathbf{u}_1 + \mathbf{Z}_2\mathbf{u}_2 + \mathbf{e}$$
+
+where
+
+$$\left(\begin{array}{c}
+  \mathbf{u}_1 \\
+  \mathbf{u}_2
+  \end{array} \right) \sim \text{MVN} [
+  \left(\begin{array}{c}
+  \mathbf{0} \\
+  \mathbf{0}
+  \end{array} \right),
+  \left(\begin{array}{cc}
+  \sigma^2_1 &  \rho_{12}\sigma_1\sigma_2 \\ 
+  \rho_{12}\sigma_1\sigma_2 &  \sigma^2_2 
+  \end{array} \right) \otimes \mathbf{K}_\text{1} ]~~~\text{(Eq. 2-2).}$$
+
+
+### Model 3-1: Modified Neighbor GWAS model
+The fifth model corresponds to the modified Neighbor GWAS model that incorporates asymmetric effects between focal and neighboring genotypes (Sato et al. 2023, 2025).  
+
+$$y_{k_i} = \beta_0 + \beta_\text{s} x_{q,k_i} + \beta_\text{n} \sum_{k_j=1}^J{x_{q,k_j}}/J_k + \beta_\text{s×n} \sum_{k_j=1}^J{(x_{q,k_i} x_{q,k_j})}/J_k + u_{k_i} + e_{k_i}~~~\text{(Eq. 3-1a)}$$
+
+or
+
+$$\mathbf{y} = \mathbf{X}_0\mathbf{\beta}_{0} + \mathbf{X}_\text{s}\mathbf{\beta}_\text{s} + \mathbf{X}_\text{n}\mathbf{\beta}_\text{n} + \mathbf{X}_\text{s×n}\mathbf{\beta}_\text{s×n} + \mathbf{Z}\mathbf{u} + \mathbf{e}~~~\text{(Eq. 3-1b)}$$
+
+This Eq. 3-1 considers a multiplicative interaction term for oligogenic IGEs (a) and its polygenic effects (b). The random effects are assumed to be additive as $\mathbf{u} \sim N(\mathbf{0},\sigma^2_1\mathbf{K}_1+\sigma^2_2\mathbf{K}_2+\sigma^2_{12}\mathbf{K}_1\odot\mathbf{K}_2)$.  
+
+# Workflow
+In this section, we showcase how to implement the above-mentioned five models using example data. 
+
+## Preparation
+
+### Install packages
+We need to install the RAINBOWR and rNeighborGWAS packages. Both are available at CRAN and GitHub as follows.  
+
+#### CRAN (stable ver.)
+```{r message = FALSE, warning = FALSE, echo = TRUE, eval = FALSE}
+install.packages("RAINBOWR")
+install.packages("rNeighborGWAS")
+```
+
+#### GitHub (developer ver.)
+```{r message = FALSE, warning = FALSE, echo = TRUE, eval = FALSE}
+devtools::install_github("KosukeHamazaki/RAINBOWR")
+devtools::install_github("yassato/rNeighborGWAS")
+```
+
+### Load packages and example data
+First of all, let us load the two packages.
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+require(RAINBOWR)
+require(rNeighborGWAS)
+```
+
+Subsequently, load the example data from the RAINBOWR package. The original data are available at Rice Diversity website (\url{http://www.ricediversity.org/data/index.cfm}), which include phenotype and genotype data on approximately 400 rice varieties (Zhao et al. 2011).
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+data("Rice_Zhao_etal")
+Rice_geno_score <- Rice_Zhao_etal$genoScore
+Rice_geno_map <- Rice_Zhao_etal$genoMap
+Rice_pheno <- Rice_Zhao_etal$pheno
+```
+
+Here we obtain the genotype data on 1311 SNP markers for 395 varieties as well as phenotype data on 36 agronomic traits for 413 varieties.  
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+See(Rice_geno_score)
+See(Rice_geno_map)
+See(Rice_pheno)
+```
+
+
+Let us analyze the trait on the first column.  
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+trait.no <- 1
+y <- as.matrix(Rice_pheno[, trait.no, drop = FALSE])
+```
+
+To exclude rare variants in advance, we set the cut-off value of minor allele frequency (MAF) at 0.05.
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+x.0 <- t(Rice_geno_score)
+MAF.cut.res <- MAF.cut(x.0 = x.0, map.0 = Rice_geno_map,
+                       min.MAF = 0.05)
+x <- MAF.cut.res$x
+map <- MAF.cut.res$map
+```
+
+### Creating the (pseudo)score of neighbor interactions  
+The original data lack spatial information; therefore, for the example data we assume that varieties on the neighboring rows in the SNP matrix are cultivated in a neighborhood. Below the fixed-effect covariate `xAdj` indicates the mean allelic similarity between the focal and neighboring individuals as defined by the original Neighbor GWAS model (Sato et al. 2021), while the design matrix `ZAdj` specifies which individuals interact in a neighborhood as formulated by the ordinal IGE model (e.g., Bijma 2014).  
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+xAdj <- array(data = NA, dim = dim(x), dimnames = dimnames(x))
+ZAdj <- array(data = 0, dim = c(nrow(x), nrow(x)),
+              dimnames = c(list(rownames(x)), list(rownames(x))))
+for (i in 1:nrow(x)) {
+  adjs <- (i - 1):(i + 1)
+  adjs <- adjs[adjs %in% 1:nrow(x)]
+  adjs <- adjs[adjs != i]
+  nAdjs <- length(adjs)
+  
+  xAdj[i, ] <- x[i, , drop = FALSE] *
+    apply(X = x[adjs, , drop = FALSE],
+          MARGIN = 2, FUN = mean)
+  ZAdj[i, adjs] <- 1 / nAdjs
+}
+```
+
+### Genomic related matrices (GRMs)
+Then we calculate a linear kernel composed of the ordinal GRM (i.e., kinship matrix $\mathbf{K}_1$ that represents direct genetic effects, DGEs) and neighbor-weighted GRM (i.e., $\mathbf{K}_2$), which assumes additive effects from polygenic DGEs and IGEs.  
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+K.A <- tcrossprod(x) / ncol(x)
+K.Adj <- tcrossprod(xAdj) / ncol(xAdj)  # for neighbor kernel
+```
+
+The phenotypes and genotypes should be matched using a design matrix.
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+Z <- design.Z(pheno.labels = rownames(y),
+              geno.names = rownames(K.A))  ### design matrix for random effects
+ZAdj <- ZAdj[rownames(Z), , drop = FALSE]
+pheno.mat <- y[rownames(Z), , drop = FALSE]
+```
+
+### Three kernel combinations
+The following shows combinations among the three kernels including the original Neighbor GWAS model. The first model shows how to implement the original Neighbor GWAS using the RAINBOWR package. This comprises the neighbor-weighted GRM $\mathbf{K}_2$ in addition to the ordinal GRM $\mathbf{K}_1$. In the RAINBOWR package, the nested `list` object specifies kernel combinations as follows.
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+ZETA1 <- list(A = list(Z = Z, K = K.A),
+              Int = list(Z = Z, K = K.Adj))
+```
+
+The second model corresponds to the ordinal IGE model, which defines interacting individuals by the design matrix `ZAdj`. In this case, IGEs represent not interactive but one-sided effects from neighboring individuals.
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+ZETA2 <- list(A = list(Z = Z, K = K.A),
+              Adj = list(Z = ZAdj, K = K.A))
+```
+
+The third model includes all of DGEs, IGEs, and their interactions. However, this model does not incorporate any covariance (which ranges from $-\infty$ to $\infty$) but variance (>0) for the three kernels.
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+ZETA3 <- list(A = list(Z = Z, K = K.A),
+              Int = list(Z = Z, K = K.Adj),
+              Adj = list(Z = Z, K = K.A*K.Adj))
+```
+
+
+### Covariance structure
+In addition to the variance, let us include DGE-IGE covariance in the models 1-2 and 2-2. According to Eq. 1 of Sato & Hamazaki (yyyy), here we consider the covariance structure for `ZETA1` as follows.  
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+K12 <- tcrossprod(x, xAdj) / sqrt(ncol(x) * ncol(xAdj)) # = (q-1) when ncol(x) = ncol(xAdj)
+K21 <- t(K12) # = "tcrossprod(xAdj, x) / sqrt(ncol(x) * ncol(xAdj))" but much faster
+```
+Note that `K12` corresponds to `K21` when transposed as `K12 = t(K21)`.  
+
+In RAINBOWR, the covariance structure is specified in the off-diagonal elements of $m \times m$ list when there are $m$ kernels.
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+covList1 <- rep(list(rep(list(NULL), 2)), 2)
+covList1[[1]][[2]] <- K12
+covList1[[2]][[1]] <- K21
+```
+
+Then let us specify the covariance structure of `ZETA2`. In the ordinal IGE model, the kinship matrix $\mathbf{K}_1$ is shared among DGEs and IGEs while the design matrix was different between DGEs and IGEs. So, we assign `K.A` to the two off-diagonal elements before specifying the design matrices `Z` and `ZAdj`.
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+covList2 <- rep(list(rep(list(NULL), 2)), 2)
+covList2[[1]][[2]] <- K.A
+covList2[[2]][[1]] <- K.A
+```
+
+For the model 3-1, we do not consider covariance for `ZETA3` as it includes interaction terms instead of covariance.  
+
+
+## Genomic prediction (GP) based on the five models
+
+#### Model 1-1 & 1-2
+The first and second model adopt `ZETA1` as a multi-kernel: The former corresponds to the original Neighbor GWAS model without covariance while the latter presents those with the covariance. Both models incorporate self-genotypic effects `K` and neighbor genotypic interactions `K.Adj` as DGEs and IGEs, respectively. 
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+EM3.res11 <- EM3.cpp(y = pheno.mat,
+                     X0 = NULL,
+                     ZETA = ZETA1)
+EM3.res12 <- EM3.cov(y = pheno.mat,
+                     X0 = NULL,
+                     ZETA = ZETA1,
+                     covList = covList1)
+```
+
+#### Model 2-1 & 2-2
+The third and fourth model adopt `ZETA2` as a multi-kernel: The former and latter represent models without and with covariance, respectively. Both models designate DGEs and IGEs by the design matrices `Z` and `Z.Adj`.
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+EM3.res21 <- EM3.cpp(y = pheno.mat,
+                     X0 = NULL,
+                     ZETA = ZETA2)
+EM3.res22 <- EM3.cov(y = pheno.mat,
+                     X0 = NULL,
+                     ZETA = ZETA2,
+                     covList = covList2, forceApproxK = TRUE)
+```
+
+Note that, if the multi-kernel cannot be positive semi-definite, `forceApproxK = TRUE` approximates the kernel to the nearest positive-definite matrix.
+
+#### Model 3-1
+The fifth model considers DGE-IGE interactions based on element-wise interaction term between `K` and `K.Adj` instead of the covariance parameters. This model adopts `ZETA3` including three kernels as `K`, `K.Adj` and `K*K.Adj`, but does not consider covariance among them.
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+EM3.res31 <- EM3.cpp(y = pheno.mat,
+                     X0 = NULL,
+                     ZETA = ZETA3)
+```
+
+In `EM3.cov` function, `nIterOptimization` option determines the maximum number of iterations until convergence.  
+
+
+## Genome-wide association study (GWAS)
+
+To make GWAS efficient, we calculate a weighted kernel $\mathbf{K}'$ based on the kernel weights: $\mathbf{K}' = \sigma^2_1\mathbf{K}_1+\sigma^2_2\mathbf{K}_2$ for Model 1-1; $\mathbf{K}' = w_1\mathbf{K}_1+\rho_{12}\sqrt{w_1w_2}(\mathbf{K}_{12}+\mathbf{K}_{21})+w_2\mathbf{K}_2$ for Model 1-2; and $\mathbf{K}' = \sigma^2_1\mathbf{K}_1+\sigma^2_2\mathbf{K}_2 + \sigma^2_{12}\mathbf{K}_1\odot\mathbf{K}_2$ for Model 3-1. Note that SNP-marker effects are not formulated in Model 2-1 and 2-2. The line of GWAS workflow are implemented as `nei_lmm` or `covnei_lmm` functions, which internally uses `gaston` package (Perdry & Dandine-Roulland 2023) and its `lmm.diago` function.     
+
+#### Model 1-1
+This workflow corresponds to the original Neighbor GWAS (Sato et al. 2021). See also the vignette of `rNeighborGWAS` package at <https://CRAN.R-project.org/package=rNeighborGWAS>.  
+
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+
+# excl. NAs
+nonNAs <- (is.na(pheno.mat[,1])==FALSE)
+pheno <- pheno.mat[nonNAs,,drop=FALSE]
+geno <- x[row.names(pheno),]
+g_nei <- xAdj[row.names(pheno),]
+
+# run GWAS
+GWAS.res11 <- nei_lmm(geno = geno,
+                      g_nei = g_nei,
+                      pheno = pheno,
+                      addcovar = NULL,
+                      response = "quantitative")
+```
+
+#### Model 1-2
+This model incorporates the covariance parameter $\rho_{12}$ into the original Neighbor GWAS. The following `covnei_lmm` function acts as a wrapper to bridge `RAINBOWR` and `rNeighborGWAS` packages, which requires `EM3.res12` object of the `RAINBOWR` package.  
+
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+covnei_lmm = function(geno, g_nei, pheno, X0=matrix(1,nrow=length(pheno)), EM3.res12, K1=NULL, K2=NULL, K12=NULL, K21=NULL, n_core=1L){
+  q <- ncol(geno)
+  
+  if(is.null(K1)==TRUE){
+    selfCross = tcrossprod(geno)
+    K1 <- (q+selfCross)/(2*(q-1))
+  }
+  if(is.null(K2)==TRUE){
+    neiCross = tcrossprod(g_nei)
+    K2 <- neiCross/(q-1)
+  }
+  if(is.null(K12)==TRUE){
+    K12 <- tcrossprod(geno,g_nei)/(q-1)
+  }
+  if(is.null(K21)==TRUE){
+    K21 <- tcrossprod(g_nei,geno)/(q-1)
+  }
+  
+  NAs <- (is.na(pheno)==FALSE)
+  y <- pheno[NAs]
+  geno <- geno[NAs,]
+  g_nei <- g_nei[NAs,]
+  X0 <- as.matrix(X0[NAs,])
+  selfK <- K1[NAs,NAs]
+  neiK = K2[NAs,NAs]
+  K12 <- K12[NAs,NAs]
+  K21 <- K21[NAs,NAs]
+  
+  K_prime <- EM3.res12$weights[1]*selfK + 
+    EM3.res12$weights[2]*neiK + 
+    EM3.res12$rhosMat[1,2]*sqrt(EM3.res12$weights[1]*EM3.res12$weights[2])*(K12 + K21)
+  
+  eigenK <- eigen(K_prime)
+  lmm0 <- gaston::lmm.diago(Y=y,X=X0,eigenK=eigenK,verbose=FALSE)
+  LL0 <- gaston::lmm.diago.profile.likelihood(tau=lmm0$tau,s2=lmm0$sigma2,h2=lmm0$tau/(lmm0$tau+lmm0$sigma2),Y=y,X=X0,eigenK=eigenK)
+  
+  test_i = function(i){
+    X1 <- cbind(X0,geno[,i])
+    lmm1 <- gaston::lmm.diago(Y=y,X=X1,eigenK=eigenK,verbose=FALSE)
+    LL1 <- gaston::lmm.diago.profile.likelihood(tau=lmm1$tau,s2=lmm1$sigma2,h2=lmm1$tau/(lmm1$tau+lmm1$sigma2),Y=y,X=X1,eigenK=eigenK)
+    
+    X2 <- cbind(X1,g_nei[,i])
+    lmm2 <- gaston::lmm.diago(Y=y,X=X2,eigenK=eigenK,verbose=FALSE)
+    LL2 <- gaston::lmm.diago.profile.likelihood(tau=lmm2$tau,s2=lmm2$sigma2,h2=lmm2$tau/(lmm2$tau+lmm2$sigma2),Y=y,X=X2,eigenK=eigenK)
+    b2 <- lmm2$BLUP_beta[(length(lmm2$BLUP_beta)-1):length(lmm2$BLUP_beta)]
+    
+    res_i <- c(b2,2*(LL1[1,1]-LL0[1,1]),2*(LL2[1,1]-LL1[1,1]))
+    names(res_i) <- c("beta1","beta2","chisq1","chisq2")
+    
+    return(res_i)
+  }
+  
+  res <- parallel::mcmapply(test_i,1:ncol(geno),mc.cores=n_core)
+  res <- t(res)
+  res <- as.data.frame(res)
+  
+  p1 <- pchisq(res$chisq1,1,lower.tail=FALSE)
+  p2 <- pchisq(res$chisq2,1,lower.tail=FALSE)
+  res <- data.frame(res,p1,p2)
+  
+  return(res)
+}
+
+GWAS.res12 <- covnei_lmm(geno = geno,
+                      g_nei = g_nei,
+                      pheno = pheno,
+                      EM3.res12 = EM3.res12)
+
+head(data.frame(map,GWAS.res12))
+```
+
+#### Model 3-1
+This model tests asymmetric neighbor effects $\beta_{12}$ in addition to $\beta_2$, which can be performed with `asym=TRUE` option in `nei_lmm` function.  
+
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+GWAS.res31 <- nei_lmm(geno = geno,
+                      g_nei = g_nei,
+                      pheno = pheno,
+                      addcovar = NULL,
+                      response = "quantitative",
+                      asym=TRUE)
+
+head(data.frame(map,GWAS.res31))
+```
+
+
+# Output 
+
+## Genomic prediction (GP)
+
+To evaluate the five models, we put them all into a single `list` object. 
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+modelNames <- c("M11", "M12", "M21", "M22", "M31")
+EM3.res.list <- list(EM3.res11, EM3.res12, EM3.res21,
+                     EM3.res22, EM3.res31)
+names(EM3.res.list) <- modelNames
+```
+
+#### Log-likelihood
+Here shows the log-likelihood of the five models. Although neighbors were haphazardly assigned in these examples, the models including the covariance $\rho_{12}$ had a higher likelihood than those without $\rho_{12}$.  
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+(LLs <- sapply(X = EM3.res.list,
+               FUN = function(x) {
+                 x$LL
+               }))
+```
+
+#### Kernel weights
+Then we see the estimated kernel weight $w_1$ and $w_2$ for the five models. As these examples involve toy data, $w_2$ is estimated to be very small.  
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+(weights <- sapply(X = EM3.res.list,
+                   FUN = function(x) {
+                     x$weights
+                   }))
+```
+
+#### Covariance parameters
+The covariance parameters $\rho_{12}$ can be shown for Models 1-2 and 2-2. As $\rho_{12}$ is unconstrained, its estimates do not necessarily range from -1 to +1.  
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+(rhos <- sapply(X = EM3.res.list[c(2, 4)],
+                FUN = function(x) {
+                  x$rhosMat[2, 1]
+                }))
+```
+
+#### Total genetic variance
+The fraction of total genetic variation is as follows.
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+(herits <- sapply(X = EM3.res.list,
+                  FUN = function(x) {
+                    x$Vu / (x$Vu + x$Ve)
+                  }))
+```
+
+The proportion of phenotypic variation explained (PVE) by DGEs, IGEs, and their covariance can be calculated for Model 1-2 and 2-2 as follows. 
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+
+# PVE by DGE
+(pve1 <- sapply(X = EM3.res.list,
+                  FUN = function(x) {
+                    x$weights[1]*x$Vu / (x$Vu + x$Ve)
+                  }))
+
+# PVE by IGE
+(pve2 <- sapply(X = EM3.res.list,
+                  FUN = function(x) {
+                    x$weights[2]*x$Vu / (x$Vu + x$Ve)
+                  }))
+
+# PVE by the covariance for Models 1-2 and 2-2
+(pve12 <- sapply(X = EM3.res.list[c(2, 4)],
+                FUN = function(x) {
+                  x$rhosMat[2, 1]*sqrt(x$weights[1]*x$weights[2])*x$Vu / (x$Vu + x$Ve)
+                }))
+
+```
+
+#### Predicted phenotypes
+Predicted phenotype values are given as follows. 
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+y.preds <- sapply(X = EM3.res.list,
+                  FUN = function(x) {
+                    x$y.pred
+                  })
+cor(y.preds)
+psych::pairs.panels(y.preds)
+```
+  
+The five models do not show large differences in their predicted values.  
+
+#### Estimates of random effects
+We can also view random effects for polygenic DGEs and IGEs. As these involve toy data, IGE estimates are almost zero.  
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+u.eachs <- sapply(X = EM3.res.list,
+                  FUN = function(x) {
+                    x$u.each
+                  })
+See(u.eachs$M11, fh = TRUE)
+See(u.eachs$M11, fh = FALSE)
+```
+
+## Genome-wide association study (GWAS)
+
+For GWAS, we can depict Manhattan plots as follows.
+
+#### Model 1-1
+The following shows Manhattan plot of neighbor genotypic effects $\beta_2$ for Model 1-1.
+
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+head(data.frame(map,GWAS.res11))
+
+out11 <- data.frame(chr=map$chr,pos=map$pos,p=GWAS.res11$p_nei)
+gaston::manhattan(x=out11,main="GWAS.res11; beta_2",las=1)
+```
+
+
+#### Model 1-2
+The following shows Manhattan plot of neighbor genotypic effects $\beta_2$ for Model 1-2. 
+
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+head(data.frame(map,GWAS.res12))
+
+out12 <- data.frame(chr=map$chr,pos=map$pos,p=GWAS.res12$p2)
+gaston::manhattan(x=out12,main="GWAS.res12; beta_2",las=1)
+
+plot(-log10(out11$p),-log10(out12$p),las=1)
+```
+
+Here, Models 1-1 and 1-2 yielded similar p-values, indicating a limited role of the covariance parameter $\rho_{12}$ in improving GWAS.  
+
+
+#### Model 3-1
+Additionally, we can see asymmetric neighbor effects $\beta_{12}$. The following shows Manhattan plot of $\beta_{12}$ for Model 3-1.  
+
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+head(data.frame(map,GWAS.res31))
+
+out31 <- data.frame(chr=map$chr,pos=map$pos,p=GWAS.res31$p_sxn)
+gaston::manhattan(x=out31,main="GWAS.res31; beta_12",las=1)
+```
+
+# Tips
+
+
+## Initial parameters of the kernel weights
+
+In the default setting, initial parameters are given to the kernel weights as (1 / no. of kernels) in `EM3.cov` function. These initial parameters can be defined by users with `parInitForWeights` option.  
+
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+EM3.res11 <- EM3.cpp(y = pheno.mat,
+                     X0 = NULL,
+                     ZETA = ZETA1)
+w <- EM3.res11$weights
+EM3.res12 <- EM3.cov(y = pheno.mat,
+                     X0 = NULL,
+                     ZETA = ZETA1,
+                     parInitForWeights = w,
+                     covList = covList1)
+
+print(w); print(EM3.res12$weights) # weights remain the same
+print(EM3.res12$rhosMat[1,2]) # covariance estimated as 0 due to w = c(1,0)
+```
+
+
+## Covariance with fixed kernel weights 
+In case $\rho_{12}$ is difficult to estimate, we may fix the kernel weights by setting `optimizeWeights = FALSE` (whose default is `TRUE`) as follows.  
+
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+EM3.res11 <- EM3.cpp(y = pheno.mat,
+                     X0 = NULL,
+                     ZETA = ZETA1)
+w <- EM3.res11$weights
+EM3.res12 <- EM3.cov(y = pheno.mat,
+                     X0 = NULL,
+                     ZETA = ZETA1,
+                     optimizeWeights = FALSE,
+                     parInitForWeights = w,
+                     covList = covList1)
+
+print(EM3.res12$rhosMat[1,2]) # the same as above due to w = c(1,0)
+```
+
+
+## Skip kernel calculations in GWAS
+We can set pre-defined kernels for `covnei_lmm` function. This enables us to skip kernel calculations and thus speed it up when repeating GWAS for multiple traits. Default setting is `K1 = NULL`, `K2 = NULL`, `K12 = NULL`, and `K21 = NULL`, which takes plenty of time to run `tcrossprod` function internally.  
+
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+GWAS.res12.list <- c()
+for(i in 1:2){
+  pheno <- as.matrix(Rice_pheno[rownames(x), i, drop = FALSE])
+  GWAS.res12 <- covnei_lmm(geno = x,
+                      g_nei = xAdj,
+                      pheno = pheno,
+                      EM3.res12 = EM3.res12,
+                      K1 = K.A, K2 = K.Adj, 
+                      K12 = K12, K21 = K21)
+  GWAS.res12.list <- c(GWAS.res12.list, list(GWAS.res12))
+}
+
+head(data.frame(map,GWAS.res12.list[[1]]))
+head(data.frame(map,GWAS.res12.list[[2]]))
+```
+
+# References
+1. Bijma, P. (2014). The quantitative genetics of indirect genetic effects: A selective review of modelling issues. Heredity, 112(1), 61-69. https://doi.org/10.1038/hdy.2013.15
+1. Hamazaki, K., & Iwata, H. (2020). RAINBOW: Haplotype-based genome-wide association study using a novel SNP-set method. PLOS Computational Biology, 16(2), e1007663. https://doi.org/10.1371/journal.pcbi.1007663
+1. Perdry, H., & Dandine-Roulland, C. (2023). gaston: Genetic Data Handling (QC, GRM, LD, PCA) & Linear Mixed Models. R package version 1.6, <https://CRAN.R-project.org/package=gaston>.
+1. Sato, Y., Yamamoto, E., Shimizu, K. K., & Nagano, A. J. (2021). Neighbor GWAS: Incorporating neighbor genotypic identity into genome-wide association studies of field herbivory. Heredity, 126(4), 597-614. https://doi.org/10.1038/s41437-020-00401-w
+1. Sato, Y., Takahashi, Y., Xu, C., & Shimizu, K. K. (2023). Detecting frequency-dependent selection through the effects of genotype similarity on fitness components. Evolution, 77(4), 1145-1157. https://doi.org/10.1093/evolut/qpad028
+1. Sato, Y. (2025). Negative frequency-dependent selection underlies overyielding through neighbor genotypic effects in _Arabidopsis thaliana_. bioRxiv. https://doi.org/10.1101/2025.05.14.654149
+1. Zhao, K., Tung, C.-W., Eizenga, G. C., Wright, M. H., Ali, M. L., Price, A. H., Norton, G. J., Islam, M. R., Reynolds, A., Mezey, J., McClung, A. M., Bustamante, C. D., & McCouch, S. R. (2011). Genome-wide association mapping reveals a rich genetic architecture of complex traits in _Oryza sativa_. Nature Communications, 2(1), 467. https://doi.org/10.1038/ncomms1467
+
+
+
+
+-----
