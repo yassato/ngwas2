@@ -60,7 +60,7 @@ for(j in 1:100) {
 }
 
 
-pdf(file=paste0("../output/IsingJ",J,"_h",h,"cnt_d1.pdf"), width=5, height=5)
+pdf(file=paste0("../IsingJ",J,"_h",h,"cnt_d1.pdf"), width=5, height=5)
 image(t(matrix(Xi,rect,rect)),main=paste(j,E),col=c("black","white"),las=1,xaxt="n",yaxt="n")
 dev.off()
 
@@ -98,5 +98,5 @@ pe = wplot(b1=0.0,b2=0.2,b12=0.3)
 pf = wplot(b1=0.1,b2=0.2,b12=-0.3)
 
 p = (pa | pb | pc) / (pd | pe | pf) + plot_annotation(tag_levels = "a")
-ggsave(p,filename="../figs/figs_numerical.pdf",width=8,height=6)
+ggsave(p,filename="../figs_numerical.pdf",width=8,height=6)
 
