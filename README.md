@@ -35,7 +35,8 @@ Phenotype data downloaded from Data INRAE repository (<https://doi.org/10.15454/
 
 - SNPs_final_2022.bim
 
-- SNPs_final_2022.fam
+- SNPs_final_2022.fam  
+Symbolic links to genotype data. The original data are available upon reasonable request to Michaela Jung and Helene Muranty as described in Jung et al. (2020).
 
 ### ./aspen
 
@@ -86,9 +87,9 @@ _RStudio project for this repository_
 
 - Barker, H. L., Holeski, L. M., & Lindroth, R. L. (2018). Genotypic variation in plant traits shapes herbivorous insect and ant communities on a foundation tree species. PLOS ONE, 13(7), e0200954. https://doi.org/10.1371/journal.pone.0200954
 - Barker, H. L., Riehl, J. F., Bernhardsson, C., Rubert‐Nason, K. F., Holeski, L. M., Ingvarsson, P. K., & Lindroth, R. L. (2019). Linking plant genes to insect communities: Identifying the genetic bases of plant traits and community composition. Molecular Ecology, 28(19), 4404–4421. https://doi.org/10.1111/mec.15158
-- Flutre, T., Le Cunff, L., Fodor, A., Launay, A., Romieu, C., Berger, G., Bertrand, Y., Terrier, N., Beccavin, I., Bouckenooghe, V., Roques, M., Pinasseau, L., Verbaere, A., Sommerer, N., Cheynier, V., Bacilieri, R., Boursiquot, J.-M., Lacombe, T., Laucou, V., ... Doligez, A. (2022). A genome-wide association and prediction study in grapevine deciphers the genetic architecture of multiple traits and identifies genes under many new QTLs. G3;Genes|Genomes|Genetics, 12(7), jkac103. https://doi.org/10.1093/g3journal/jkac103
+- Flutre, T., Le Cunff, L., Fodor, A., Launay, A., Romieu, C., Berger, G., Bertrand, Y., Terrier, N., Beccavin, I., Bouckenooghe, V., Roques, M., Pinasseau, L., Verbaere, A., Sommerer, N., Cheynier, V., Bacilieri, R., Boursiquot, J.-M., Lacombe, T., Laucou, V., ..., Doligez, A. (2022). A genome-wide association and prediction study in grapevine deciphers the genetic architecture of multiple traits and identifies genes under many new QTLs. G3;Genes|Genomes|Genetics, 12(7), jkac103. https://doi.org/10.1093/g3journal/jkac103
 - Haller, B. C., & Messer, P. W. (2019). SLiM 3: Forward Genetic Simulations Beyond the Wright–Fisher Model. Molecular Biology and Evolution, 36(3), 632–637. https://doi.org/10.1093/molbev/msy228
 - Jung, M., Keller, B., Roth, M., Aranzana, M. J., Auwerkerken, A., Guerra, W., Al-Rifaï, M., Lewandowski, M., Sanin, N., Rymenants, M., Didelot, F., Dujak, C., Font i Forcada, C., Knauf, A., Laurens, F., Studer, B., Muranty, H., & Patocchi, A. (2022). Genetic architecture and genomic predictive ability of apple quantitative traits across environments. Horticulture Research, 9, uhac028. https://doi.org/10.1093/hr/uhac028
+- Jung, M., Roth, M., Aranzana, M. J., Auwerkerken, A., Bink, M., Denancé, C., Dujak, C., Durel, C.-E., Font i Forcada, C., Cantin, C. M., Guerra, W., Howard, N. P., Keller, B., Lewandowski, M., Ordidge, M., Rymenants, M., Sanin, N., Studer, B., Zurawicz, E., ..., Muranty, H. (2020). The apple REFPOP—a reference population for genomics-assisted breeding in apple. Horticulture Research, 7(1), 189. https://doi.org/10.1038/s41438-020-00408-8
 - Riehl, J. F. L., Cole, C. T., Morrow, C. J., Barker, H. L., Bernhardsson, C., Rubert‐Nason, K., Ingvarsson, P. K., & Lindroth, R. L. (2023). Genomic and transcriptomic analyses reveal polygenic architecture for ecologically important traits in aspen (_Populus tremuloides_ Michx.). Ecology and Evolution, 13(10), e10541. https://doi.org/10.1002/ece3.10541
-- Sato, Y., Takahashi, Y., Xu, C., & Shimizu, K. K. (2023). Detecting frequency-dependent selection through the effects of genotype similarity on fitness components. Evolution, 77(4), 1145–1157. https://doi.org/10.1093/evolut/qpad028
-- 
+- Sato, Y., Takahashi, Y., Xu, C., & Shimizu, K. K. (2023). Detecting frequency-dependent selection through the effects of genotype similarity on fitness components. Evolution, 77(4), 1145–1157. https://doi.org/10.1093/evolut/qpad028  
