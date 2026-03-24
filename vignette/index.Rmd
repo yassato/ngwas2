@@ -2,7 +2,7 @@
 title: "Vignette: IGEs through the lens of neighbor genotypic identity"
 author: 
   - Yasuhiro Sato ^[Faculty of Environmental Earth Science, Hokkaido University (email:yassato@ees.hokudai.ac.jp)]
-  - Kosuke Hamazaki ^[XX, YY (email:hamazaki@ut-biomet.org)]
+  - Kosuke Hamazaki ^[Institute for Advanced Academic Research (IAAR), Chiba University (email:hamazaki@ut-biomet.org)]
 output: rmdformats::readthedown
 ---
 
@@ -14,8 +14,8 @@ Indirect genetic effects (IGEs) are ubiquitous in nature and agriculture. To ena
 ### Model 1-1: Original Neighbor GWAS model
 The first model corresponds to the original model of Neighbor GWAS (Sato et al. 2021), which explains the trait of $i$-th individual within a local space $k$, $y_{k_i}$, by own genetic effects at $q$-th SNP marker $x_{q,k_i}$ and its mean similarity with $j$-th neighboring individual ($x_{q,k_i} x_{q,k_j})$ over total $J$ neighbors as follows.
 
-$$y_{k_i} = \beta_0 + \beta_1 x_{q,k_i} + \beta_2 \sum_{k_j=1}^{J_k}{(x_{q,k_i} x_{q,k_j})}/J + u_{k_i} + e_{k_i}~~~\text{(Eq. 1-1a)}$$
-where $\beta_1$ and $\beta_2$ indicate self and neighbor genotypic effects, respectively. $\beta_0$, $u_{k_i}$, and $e_{k_i}$ indicate the intercept, random effects, and residuals. Eq. 1-1a is also expressed as follows.
+$$y_{k_i} = \beta_0 + \beta_{q,1} x_{q,k_i} + \beta_{q,2} \sum_{k_j=1}^{J_k}{(x_{q,k_i} x_{q,k_j})}/J + u_{k_i} + e_{k_i}~~~\text{(Eq. 1-1a)}$$
+where $\beta_{q,1}$ and $\beta_{q,2}$ indicate self and neighbor genotypic effects, respectively. $\beta_0$, $u_{k_i}$, and $e_{k_i}$ indicate the intercept, random effects, and residuals. Eq. 1-1a is also expressed as follows.
 
 $$\mathbf{y} = \mathbf{X}_0\mathbf{\beta}_{0} + \mathbf{X}_\text{1}\mathbf{\beta}_\text{1} + \mathbf{X}_\text{2}\mathbf{\beta}_\text{2} + \mathbf{Z}\mathbf{u} + \mathbf{e}~~~\text{(Eq. 1-1b)}$$
 
@@ -94,7 +94,7 @@ $$\left(\begin{array}{c}
 ### Model 3-1: Modified Neighbor GWAS model
 The fifth model corresponds to the modified Neighbor GWAS model that incorporates asymmetric effects between focal and neighboring genotypes (Sato et al. 2023, 2025).  
 
-$$y_{k_i} = \beta_0 + \beta_\text{s} x_{q,k_i} + \beta_\text{n} \sum_{k_j=1}^J{x_{q,k_j}}/J_k + \beta_\text{s×n} \sum_{k_j=1}^J{(x_{q,k_i} x_{q,k_j})}/J_k + u_{k_i} + e_{k_i}~~~\text{(Eq. 3-1a)}$$
+$$y_{k_i} = \beta_0 + \beta_{q,\text{s}} x_{q,k_i} + \beta_{q,\text{n}} \sum_{k_j=1}^J{x_{q,k_j}}/J_k + \beta_{q,\text{s×n}} \sum_{k_j=1}^J{(x_{q,k_i} x_{q,k_j})}/J_k + u_{k_i} + e_{k_i}~~~\text{(Eq. 3-1a)}$$
 
 or
 
@@ -177,6 +177,13 @@ for (i in 1:nrow(x)) {
           MARGIN = 2, FUN = mean)
   ZAdj[i, adjs] <- 1 / nAdjs
 }
+```
+
+The same thing can be made easy using the `nei_coval` function of `rNeighborGWAS` package.
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+smap <- cbind(x=c(1:nrow(x)), y=rep(1,nrow(x))) # spatial map
+xAdj2 <- nei_coval(geno=x, smap=smap, scale=1+0.01) # refer to the nearest neighbors only
+sum(xAdj2!=xAdj) # all same between this and xAdj above
 ```
 
 ### Genomic related matrices (GRMs)
