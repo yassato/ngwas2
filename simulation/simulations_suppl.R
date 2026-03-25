@@ -82,8 +82,8 @@ wplot = function(b1,b2,b12) {
     geom_function(fun=W_A, col=grey(0.0,1.0),args=list(b1,b2,b12)) +
     geom_function(fun=W_a, col=grey(0.0,0.5),args=list(b1,b2,b12)) + 
     geom_function(fun=W_m, lty=2,args=list(b1,b2,b12)) + 
-    ylab(expression(y[k[i]])) + xlab(expression(f[A])) +
-    labs(subtitle=bquote(beta[s]*"="*.(b1)*"; "*beta[n]*"="*.(b12)*"; "*beta[sxn]*"="*.(b2)))
+    ylab(expression(y[k[i]])) + xlab(expression(f["q,A"])) +
+    labs(subtitle=bquote(beta["q,s"]*"="*.(b1)*"; "*beta["q,n"]*"="*.(b12)*"; "*beta["q,sxn"]*"="*.(b2)))
   return(p)
 } 
 
