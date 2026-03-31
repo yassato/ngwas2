@@ -98,5 +98,5 @@ pe = wplot(b1=0.0,b2=0.2,b12=0.3)
 pf = wplot(b1=0.1,b2=0.2,b12=-0.3)
 
 p = (pa | pb | pc) / (pd | pe | pf) + plot_annotation(tag_levels = "a")
-ggsave(p,filename="../figs_numerical.pdf",width=8,height=6)
+ggsave(p,filename="../figs_numerical.pdf",width=9,height=6)
 
