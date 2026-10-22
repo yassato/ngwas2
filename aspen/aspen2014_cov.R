@@ -61,8 +61,10 @@ g$gmap = g$gmap[which(AF < 0.95 & AF > 0.05),]
 ######
 # PVE including covariance
 y2014[,8:37] = log(y2014[,8:37]+0.5)
-traits = colnames(y2014[38:ncol(y2014)])
+traits = colnames(y2014[,c(8:10,38:ncol(y2014))])
+EM3y2014res11 = c()
 EM3y2014res12 = c()
+EM3y2014res12se = c()
 for(trait in traits){ print(trait)
 
   pos = g$gmap
@@ -103,7 +105,7 @@ for(trait in traits){ print(trait)
   covList1[[1]][[2]] <- K12
   covList1[[2]][[1]] <- K21
   
-  X0 = model.matrix(~factor(pheno$BLK))
+  X0 = model.matrix(~factor(pheno$BLK)+poly(pheno$ROW,2)+poly(pheno$POS,2))
   rownames(X0) = ind_names
   
   EM3.res11 <- EM3.cpp(y = y,
@@ -123,21 +125,153 @@ for(trait in traits){ print(trait)
                        forceApproxK = TRUE,
                        nIterOptimization=10^5, traceInside=1)
   
+  EM3cov.SE.res <- try(calcParamSE.cov(
+    y = y,
+    EM3.cov.res = EM3.res12,
+    ZETA = ZETA1,
+    covList = covList1,
+    X0 = X0,
+    REML = TRUE
+  ))
+  
   EM3y2014res11 = c(EM3y2014res11,list(EM3.res11))
   EM3y2014res12 = c(EM3y2014res12,list(EM3.res12))
+  EM3y2014res12se = c(EM3y2014res12se,list(EM3cov.SE.res))
+  
 }
 names(EM3y2014res11) = traits
 names(EM3y2014res12) = traits
+names(EM3y2014res12se) = traits
 
-saveRDS(EM3y2014res11,file="../output/aspen/aspen_2014_EM3res11_s1.rds")
-saveRDS(EM3y2014res12,file="../output/aspen/aspen_2014_EM3res12_s1.rds")
+saveRDS(EM3y2014res11,file="../output/aspen/aspen_2014_EM3res11_rc.rds")
+saveRDS(EM3y2014res12,file="../output/aspen/aspen_2014_EM3res12_rc.rds")
+saveRDS(EM3y2014res12se,file="../output/aspen/aspen_2014_EM3res12se_rc.rds")
+
+
+# reload
+EM3y2014res11 = readRDS(file="../output/aspen/aspen_2014_EM3res11_rc.rds")
+EM3y2014res12 = readRDS(file="../output/aspen/aspen_2014_EM3res12_rc.rds")
+EM3y2014res12se = readRDS(file="../output/aspen/aspen_2014_EM3res12se_rc.rds")
+
+
+#######
+# for conventional IGE model
+traits = colnames(y2014[,c(8:10,38:ncol(y2014))])
+EM3y2014res21 = c()
+EM3y2014res22 = c()
+for(trait in traits){ print(trait)
+  pos = g$gmap
+  geno = g$geno
+  pheno = y2014
+  smap = map
+  
+  # calc. K
+  selfCross = tcrossprod(geno)
+  q = ncol(geno)
+  selfK = (q+selfCross)/(2*(q-1))
+  
+  ZAdj = matrix(rep(0,nrow(pheno)^2),nrow(pheno),nrow(pheno))
+  grouping = factor(pheno$BLK)
+  for(i in levels(grouping)){
+    sub = pheno[grouping==i,]
+    m = as.matrix(dist(cbind(sub$ROW,sub$POS)))
+    Zsub = mapply(FUN=function(x){as.numeric(m[,x]<=1.01&m[,x]>0)},1:nrow(m))
+    ZAdj[grouping==i,grouping==i] = Zsub
+  }
+  
+  y = as.matrix(pheno[,trait])
+  ind_names = paste0("ind",1:length(y))
+  rownames(y) = ind_names
+  Z = diag(length(y))
+  rownames(Z) = ind_names
+  colnames(Z) = ind_names
+  rownames(selfK) = ind_names
+  colnames(selfK) = ind_names
+  
+  # for IGE model
+  rownames(ZAdj) = ind_names
+  colnames(ZAdj) = ind_names
+  ZETA2 <- list(A = list(Z = Z, K = selfK),
+                Adj = list(Z = ZAdj, K = selfK))
+  
+  # for IGE model
+  covList2 <- rep(list(rep(list(NULL), 2)), 2)
+  covList2[[1]][[2]] <- selfK
+  covList2[[2]][[1]] <- selfK
+  
+  X0 = model.matrix(~factor(pheno$BLK)+poly(smap[,1],2)+poly(smap[,2],2))
+  rownames(X0) = ind_names
+  
+  # for IGE model
+  EM3.res21 <- EM3.cpp(y = y,
+                       X0 = X0,
+                       ZETA = ZETA2)
+  w = EM3.res21$weights
+  if(sum(w==TRUE)==1) {
+    w[w==1] = 0.99
+    w[w==0] = 0.01
+  }
+  EM3.res22 <- try(EM3.cov(y = y,
+                           X0 = X0,
+                           ZETA = ZETA2,
+                           covList = covList2,
+                           optimizeWeights = TRUE,
+                           parInitForWeights = w,
+                           forceApproxK = TRUE,
+                           nIterOptimization = 10^5, traceInside = 1))
+  
+  EM3y2014res21 = c(EM3y2014res21,list(EM3.res21))
+  EM3y2014res22 = c(EM3y2014res22,list(EM3.res22))
+}
+names(EM3y2014res21) = traits
+names(EM3y2014res22) = traits
+
+saveRDS(EM3y2014res21,file="../../output/aspen_2014_EM3res21_rc1.rds")
+saveRDS(EM3y2014res22,file="../../output/aspen_2014_EM3res22_rc1.rds")
+
+
+####
+# LL comparison
+EM3y2014res21 = readRDS(file="../output/aspen/aspen_2014_EM3res21_rc1.rds")
+EM3y2014res22 = readRDS(file="../output/aspen/aspen_2014_EM3res22_rc1.rds")
+ll12 = c(); ll21 = c(); ll22 = c()
+for(i in names(EM3y2014res22)){
+  ll12 = c(ll12,EM3y2014res12[[i]]$LL)
+  ll21 = c(ll21,EM3y2014res21[[i]]$LL)
+  ll22 = c(ll22,EM3y2014res22[[i]]$LL)
+  print(c(EM3y2014res22[[i]]$weights[2],EM3y2014res22[[i]]$rhosMat[1,2],EM3y2014res22[[i]]$LL))
+}
+boxplot(ll12-ll22)
+wilcox.test(ll12,ll22,paired=TRUE)
+ll12_2014 = ll12
+ll22_2014 = ll22
 
 # show results for Table S1
-for(i in 1:length(traits)) print(c(traits[i],EM3y2014res11[[i]]$Vu,EM3y2014res11[[i]]$Ve,EM3y2014res11[[i]]$weights,EM3y2014res11[[i]]$LL))
-for(i in 1:length(traits)) print(c(traits[i],EM3y2014res12[[i]]$Vu,EM3y2014res12[[i]]$Ve,EM3y2014res12[[i]]$weights,EM3y2014res12[[i]]$rhosMat[1,2],EM3y2014res12[[i]]$LL))
-
-EM3y2014res11 = readRDS(file="../output/aspen/aspen_2014_EM3res11_s1.rds")
-EM3y2014res12 = readRDS(file="../output/aspen/aspen_2014_EM3res12_s1.rds")
+se2014 = c()
+for(i in traits){
+  chi = -2*(EM3y2014res11[[i]]$LL-EM3y2014res12[[i]]$LL)
+  pchi = pchisq(chi,df=1,lower.tail=FALSE)
+  if(class(EM3y2014res12se[[i]])!="try-error"){
+    se2014 = rbind(se2014, c(EM3y2014res12se[[i]]$parameterTable$Estimate[1],EM3y2014res12se[[i]]$parameterTable$SE[1],
+                         EM3y2014res12se[[i]]$parameterTable$Estimate[3],EM3y2014res12se[[i]]$parameterTable$SE[3],
+                         EM3y2014res12se[[i]]$parameterTable$Estimate[2],EM3y2014res12se[[i]]$parameterTable$SE[2],
+                         EM3y2014res12se[[i]]$parameterTable$Estimate[4],EM3y2014res12se[[i]]$parameterTable$SE[4],
+                         chi,pchi)
+               )
+  } else {
+    se2014 = rbind(se2014, c(EM3y2014res12[[i]]$Vu*EM3y2014res12[[i]]$weights[1],NA,
+                             EM3y2014res12[[i]]$Vu*EM3y2014res12[[i]]$weights[2],NA,
+                             EM3y2014res12[[i]]$rhosMat[1,2],NA,
+                             EM3y2014res12[[i]]$Ve,NA,
+                             chi,pchi)
+                   )
+  }
+}
+colnames(se2014) = c("sigma1","sigma1_se","sigma2","sigma2_se","sigma12","sigma12_se","sigmae","sigmae_se","Chi","p")
+rownames(se2014) = traits
+N = apply(is.na(y2014[,c(8:10,38:ncol(y2014))])==FALSE,2,sum)
+se2014 = data.frame(N,se2014)
+write.csv(se2014,"../../aspen2014_TableS1a.csv")
 
 # plot PVEs
 sum2014 = c()
@@ -168,20 +302,24 @@ for(trait in traits){
   smap = map
   g_nei = nei_coval(geno,smap,scale=1+0.01,grouping=pheno$BLK,n_core=1L)
   
-  X0 = model.matrix(~factor(pheno$BLK))
-  res = covnei_lmm(geno,g_nei,pheno=pheno[,trait],X0=X0,EM3.res12=EM3y2014res12[[trait]],K1=selfK,K2=neiK,K12=K12,K21=K21,n_core=4L)
+  # X0 = model.matrix(~factor(pheno$BLK))
+  X0 = model.matrix(~factor(pheno$BLK)+poly(pheno$ROW,2)+poly(pheno$POS,2))
+  res = covnei_lmm(geno,g_nei,pheno=pheno[,trait],X0=X0,EM3.res12=EM3y2014res12[[trait]],K1=selfK,K2=neiK,K12=K12,K21=K21,n_core=8L)
   
   covneilmm2014 = c(covneilmm2014,list(res))
 }
 names(covneilmm2014) = traits
-saveRDS(covneilmm2014,file="../output/aspen/aspen_covneilmm2014.rds")
+saveRDS(covneilmm2014,file="../output/aspen/aspen_covneilmm2014rc.rds")
 
-covneilmm2014 = readRDS(file="../output/aspen/aspen_covneilmm2014.rds")
-for(i in 1:21) {
+covneilmm2014 = readRDS(file="../output/aspen/aspen_covneilmm2014rc.rds")
+nsnps = c()
+gifs = c()
+for(i in 1:length(covneilmm2014)) {
   print(names(covneilmm2014)[i])
-  print(sum(p.adjust(covneilmm2014[[i]]$p2,method="fdr")<0.05,na.rm=TRUE))
+  gifs = c(gifs,median(log10(covneilmm2014[[i]]$p2),na.rm=TRUE)/median(log10(ppoints(length(covneilmm2014[[i]]$p2)))))
+  nsnps = c(nsnps,sum(p.adjust(covneilmm2014[[i]]$p2,method="fdr")<0.05,na.rm=TRUE))
 }
-
+#write.csv(cbind(nsnps,gifs),"../../tmp.csv")
 
 ####
 # cross-validation
@@ -226,7 +364,7 @@ covList1 <- rep(list(rep(list(NULL), 2)), 2)
 covList1[[1]][[2]] <- K12
 covList1[[2]][[1]] <- K21
 
-X0 = model.matrix(~factor(pheno$BLK))
+X0 = model.matrix(~factor(pheno$BLK)+poly(pheno$ROW,2)+poly(pheno$POS,2))
 rownames(X0) = ind_names
 
 nfold = 10
@@ -276,7 +414,7 @@ maep14 = cv2014 %>%
   gather(c("MAE_noncov","MAE_cov"),key="model",value="MAE") %>%
   ggplot(aes(x=model,y=MAE)) + geom_boxplot() + geom_jitter() + theme_bw()
 
-ggsave(r2p14 + maep14, filename=paste0("../../cv_y2014_",trait,".pdf"),width = 6,height = 3)
+ggsave(r2p14 + maep14, filename=paste0("../../cv_y2014_",trait,"rc.pdf"),width = 6,height = 3)
 
 setwd("../")
 

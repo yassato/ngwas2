@@ -1,5 +1,5 @@
 # ngwas2
-Neighbor GWAS2: Dissecting oligogenic and polygenic indirect genetic effects through the lens of neighbor genotypic identity
+Neighbor GWAS2: Dissecting oligogenic and polygenic indirect genetic effects through the lens of neighboring plant genotypes
 
 ## File description
 
@@ -36,7 +36,7 @@ Phenotype data downloaded from Data INRAE repository (<https://doi.org/10.15454/
 - SNPs_final_2022.bim
 
 - SNPs_final_2022.fam  
-Symbolic links to genotype data. The original data are available upon reasonable request to Michaela Jung and Helene Muranty as described in Jung et al. (2020).
+Symbolic links to genotype data. The original data are deposited by Jung et al. (2025) on Zenodo (<https:// doi.org/10.5281/zenodo.14191209>).
 
 ### ./aspen
 
@@ -90,6 +90,6 @@ _RStudio project for this repository_
 - Flutre, T., Le Cunff, L., Fodor, A., Launay, A., Romieu, C., Berger, G., Bertrand, Y., Terrier, N., Beccavin, I., Bouckenooghe, V., Roques, M., Pinasseau, L., Verbaere, A., Sommerer, N., Cheynier, V., Bacilieri, R., Boursiquot, J.-M., Lacombe, T., Laucou, V., ..., Doligez, A. (2022). A genome-wide association and prediction study in grapevine deciphers the genetic architecture of multiple traits and identifies genes under many new QTLs. G3;Genes|Genomes|Genetics, 12(7), jkac103. https://doi.org/10.1093/g3journal/jkac103
 - Haller, B. C., & Messer, P. W. (2019). SLiM 3: Forward Genetic Simulations Beyond the Wright–Fisher Model. Molecular Biology and Evolution, 36(3), 632–637. https://doi.org/10.1093/molbev/msy228
 - Jung, M., Keller, B., Roth, M., Aranzana, M. J., Auwerkerken, A., Guerra, W., Al-Rifaï, M., Lewandowski, M., Sanin, N., Rymenants, M., Didelot, F., Dujak, C., Font i Forcada, C., Knauf, A., Laurens, F., Studer, B., Muranty, H., & Patocchi, A. (2022). Genetic architecture and genomic predictive ability of apple quantitative traits across environments. Horticulture Research, 9, uhac028. https://doi.org/10.1093/hr/uhac028
-- Jung, M., Roth, M., Aranzana, M. J., Auwerkerken, A., Bink, M., Denancé, C., Dujak, C., Durel, C.-E., Font i Forcada, C., Cantin, C. M., Guerra, W., Howard, N. P., Keller, B., Lewandowski, M., Ordidge, M., Rymenants, M., Sanin, N., Studer, B., Zurawicz, E., ..., Muranty, H. (2020). The apple REFPOP—a reference population for genomics-assisted breeding in apple. Horticulture Research, 7(1), 189. https://doi.org/10.1038/s41438-020-00408-8
+- Jung, M., Quesada-Traver, C., Roth, M., Aranzana, M. J., Muranty, H., Rymenants, M., Guerra, W., Holzknecht, E., Pradas, N., Lozano, L., Didelot, F., Laurens, F., Yates, S., Studer, B., Broggini, G. A. L., & Patocchi, A. (2025). Integrative multi-environmental genomic prediction in apple. Horticulture Research, 12(2), uhae319. https://doi.org/10.1093/hr/uhae319
 - Riehl, J. F. L., Cole, C. T., Morrow, C. J., Barker, H. L., Bernhardsson, C., Rubert‐Nason, K., Ingvarsson, P. K., & Lindroth, R. L. (2023). Genomic and transcriptomic analyses reveal polygenic architecture for ecologically important traits in aspen (_Populus tremuloides_ Michx.). Ecology and Evolution, 13(10), e10541. https://doi.org/10.1002/ece3.10541
 - Sato, Y., Takahashi, Y., Xu, C., & Shimizu, K. K. (2023). Detecting frequency-dependent selection through the effects of genotype similarity on fitness components. Evolution, 77(4), 1145–1157. https://doi.org/10.1093/evolut/qpad028  

@@ -100,3 +100,39 @@ pf = wplot(b1=0.1,b2=0.2,b12=-0.3)
 p = (pa | pb | pc) / (pd | pe | pf) + plot_annotation(tag_levels = "a")
 ggsave(p,filename="../figs_numerical.pdf",width=9,height=6)
 
+
+############
+# Figure S3
+W_AA = function(x,b1,b2,b12) 1+b1-(b12+b2)*(x^2-3*x+1)
+W_Aa = function(x,b1,b2,b12) 1+b2*(x^2-x+0.5)
+W_aa = function(x,b1,b2,b12) 1-b1-(b12-b2)*(x^2-3*x+1)
+
+W_A = function(x,b1,b2,b12) x*W_AA(x,b1,b2,b12)+(1-x)*W_Aa(x,b1,b2,b12)
+W_a = function(x,b1,b2,b12) x*W_Aa(x,b1,b2,b12)+(1-x)*W_aa(x,b1,b2,b12)
+W_m = function(x,b1,b2,b12) x*W_A(x,b1,b2,b12)+(1-x)*W_a(x,b1,b2,b12)
+
+wplot = function(b1,b2,b12) {
+  p2 = 0.5*(b12-b2)/b12
+  w2 = p2*W_A(p2,b1,b2,b12)+(1-p2)*W_a(p2,b1,b2,b12)
+  p = ggplot(NULL,aes(x=0.5,y=0.5*W_A(0.5,b1,b2,b12)+(1-0.5)*W_a(0.5,b1,b2,b12))) + 
+    ylim(0.5,1.5) + xlim(0,1) + theme_classic() +
+    geom_function(fun=W_A, col=grey(0.0,1.0),args=list(b1,b2,b12)) +
+    geom_function(fun=W_a, col=grey(0.0,0.5),args=list(b1,b2,b12)) + 
+    geom_function(fun=W_m, lty=2,args=list(b1,b2,b12)) + 
+    ylab(expression(y[k[i]])) + xlab(expression(f["q,A"])) +
+    labs(subtitle=bquote(beta["q,s"]*"="*.(b1)*"; "*beta["q,n"]*"="*.(b12)*"; "*beta["q,sxn"]*"="*.(b2)))
+  return(p)
+} 
+
+pa = wplot(b1=0.1,b2=-0.2,b12=0.0)
+pa = pa + geom_text(aes(x=0.025,y=1.5),label="(black): A alleles",size=3,hjust=0) + 
+  geom_text(aes(x=0.025,y=1.4),label="(gray): a alleles",colour=grey(0.5,1),size=3,hjust=0) +
+  geom_text(aes(x=0.025,y=1.3),label="(dashed): weighted mean",size=3,hjust=0)
+pb = wplot(b1=0.0,b2=-0.2,b12=0.3)
+pc = wplot(b1=0.1,b2=-0.2,b12=-0.3)
+pd = wplot(b1=0.1,b2=0.2,b12=0)
+pe = wplot(b1=0.0,b2=0.2,b12=0.3)
+pf = wplot(b1=0.1,b2=0.2,b12=-0.3)
+
+p2 = (pa | pb | pc) / (pd | pe | pf) + plot_annotation(tag_levels = "a")
+ggsave(p2,filename="../figs_numerical2.pdf",width=9,height=6)
