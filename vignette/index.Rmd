@@ -19,7 +19,7 @@ where $\beta_{q,1}$ and $\beta_{q,2}$ indicate self and neighbor genotypic effec
 
 $$\mathbf{y} = \mathbf{X}_0\mathbf{\beta}_{0} + \mathbf{X}_\text{1}\mathbf{\beta}_\text{1} + \mathbf{X}_\text{2}\mathbf{\beta}_\text{2} + \mathbf{Z}\mathbf{u} + \mathbf{e}~~~\text{(Eq. 1-1b)}$$
 
-where the random effects constitute additive effects from self and neighbor genotypes as $\mathbf{u} \sim N(\mathbf{0},\sigma^2_1\mathbf{K}_1+\sigma^2_2\mathbf{K}_2)$. The former kernel $\mathbf{K}_1$ is the ordinal genomic relatedness matrix (GRM), while the latter kernel $\mathbf{K}_2 = \mathbf{X}_\text{2}\mathbf{X}_\text{2}^\mathsf{T}$ represents global allelic similarity whose elements are defined as $(\mathbf{K}_{2})_{k,l} = \sum_{q=1}^Q[(x_{q,k_i}x_{q,l_i}){\sum_{j=1}^{J_k}(x_{q,k_j})\sum_{j=1}^{J_l}(x_{q,l_j})}]/(Q-1)$ between local spaces $k$ and $l$.   
+where the random effects constitute additive effects from self and neighbor genotypes as $\mathbf{u} \sim N(\mathbf{0},\sigma^2_1\mathbf{K}_1+\sigma^2_2\mathbf{K}_2)$. The former kernel $\mathbf{K}_1$ is the ordinal genomic relatedness matrix (GRM), while the latter kernel $\mathbf{K}_2 = \mathbf{X}_\text{2}\mathbf{X}_\text{2}^\mathsf{T}$ represents global allelic similarity whose elements are defined as $(\mathbf{K}_{2})_{k,l} = \sum_{q=1}^Q[(x_{q,k_i}x_{q,l_i}){\sum_{j=1}^{J_k}(x_{q,k_j})\sum_{j=1}^{J_l}(x_{q,l_j})}]/(Q-1)$ between local spaces $k$ and $l$. Unless otherwise defined, the residuals follows a univariate normal distribution without covariance as $\mathbf{e} \sim \text{N(} \mathbf{0},\sigma^2_\text{e}\mathbf{I}\text{)}$.  
 
 ### Model 1-2: The proposed joint model
 The second model extends the first model to incorporate covariance between self and neighbor genotypic effects, which enables joint modeling of polygenic and oligogenic IGEs.  
@@ -43,7 +43,7 @@ $$\left(\begin{array}{c}
   \left(\begin{array}{cc}
   \sigma^2_1 \mathbf{K}_\text{1} &  \rho_{12}\sigma_1\sigma_2 \mathbf{K}_\text{12} \\ 
   \rho_{12}\sigma_1\sigma_2 \mathbf{K}_\text{21} &  \sigma^2_2 \mathbf{K}_\text{2}
-  \end{array} \right) ]~~~\text{(Eq. 1).}$$
+  \end{array} \right) ]~~~\text{(Eq. 1-2).}$$
 
 The random effects follow a multi-variate normal (MVN) distribution that considers the covariance $\rho_{12}\sigma_1\sigma_2$ between DGEs and IGEs. The off-diagonal kernels $\mathbf{K}_\text{12} = \mathbf{X}_1\mathbf{X}_2^\mathsf{T}$ and $\mathbf{K}_\text{21}=\mathbf{X}_2\mathbf{X}_1^\mathsf{T}$ represent asymmetric effects from one allele to another in a neighborhood.   
 
@@ -92,7 +92,7 @@ $$\left(\begin{array}{c}
 
 
 ### Model 3-1: Modified Neighbor GWAS model
-The fifth model corresponds to the modified Neighbor GWAS model that incorporates asymmetric effects between focal and neighboring genotypes (Sato et al. 2023, 2025).  
+The fifth model corresponds to the modified Neighbor GWAS model that incorporates asymmetric effects between focal and neighboring genotypes (Sato et al. 2023, 2026).  
 
 $$y_{k_i} = \beta_0 + \beta_{q,\text{s}} x_{q,k_i} + \beta_{q,\text{n}} \sum_{k_j=1}^J{x_{q,k_j}}/J_k + \beta_{q,\text{s×n}} \sum_{k_j=1}^J{(x_{q,k_i} x_{q,k_j})}/J_k + u_{k_i} + e_{k_i}~~~\text{(Eq. 3-1a)}$$
 
@@ -536,6 +536,28 @@ gaston::manhattan(x=out31,main="GWAS.res31; beta_12",las=1)
 
 # Tips
 
+## Calculating standard errors from Fisher's information matrix  
+
+We can calculate asymptotic standard errors (SEs) for (co)variance parameters using the inverse of the information matrix (Searle et al. 1992). These methods are implemented as `calcParamSE` and `calcParamSE.cov` functions for the mixed models with and without covariance, respectively.  
+
+```{r message = FALSE, warning = FALSE, echo = TRUE}
+EM3.SE.res <- calcParamSE(y = pheno.mat,
+                          MM.res = EM3.res11,
+                          ZETA = ZETA1,
+                          X0 = NULL,
+                          REML = TRUE)
+EM3cov.SE.res <- calcParamSE.cov(y = pheno.mat,
+                                 EM3.cov.res = EM3.res12,
+                                 ZETA = ZETA1,
+                                 covList = covList1,
+                                 X0 = NULL,
+                                 REML = TRUE)
+
+print(EM3.SE.res$parameterTable)
+print(EM3cov.SE.res$parameterTable)
+```
+
+
 
 ## Initial parameters of the kernel weights
 
@@ -602,7 +624,8 @@ head(data.frame(map,GWAS.res12.list[[2]]))
 1. Perdry, H., & Dandine-Roulland, C. (2023). gaston: Genetic Data Handling (QC, GRM, LD, PCA) & Linear Mixed Models. R package version 1.6, <https://CRAN.R-project.org/package=gaston>.
 1. Sato, Y., Yamamoto, E., Shimizu, K. K., & Nagano, A. J. (2021). Neighbor GWAS: Incorporating neighbor genotypic identity into genome-wide association studies of field herbivory. Heredity, 126(4), 597-614. https://doi.org/10.1038/s41437-020-00401-w
 1. Sato, Y., Takahashi, Y., Xu, C., & Shimizu, K. K. (2023). Detecting frequency-dependent selection through the effects of genotype similarity on fitness components. Evolution, 77(4), 1145-1157. https://doi.org/10.1093/evolut/qpad028
-1. Sato, Y. (2025). Negative frequency-dependent selection underlies overyielding through neighbor genotypic effects in _Arabidopsis thaliana_. bioRxiv. https://doi.org/10.1101/2025.05.14.654149
+1. Sato, Y. (2026). Negative frequency-dependent selection underlies overyielding through neighbour genotypic effects in Arabidopsis thaliana. Philosophical Transactions B, 381(1952), 20250179. https://doi.org/10.1098/rstb.2025.0179
+1. Searle, S. R., Casella, G., & McCulloch, C. E. (1992). Variance Components (1st ed.). Wiley. https://doi.org/10.1002/9780470316856
 1. Zhao, K., Tung, C.-W., Eizenga, G. C., Wright, M. H., Ali, M. L., Price, A. H., Norton, G. J., Islam, M. R., Reynolds, A., Mezey, J., McClung, A. M., Bustamante, C. D., & McCouch, S. R. (2011). Genome-wide association mapping reveals a rich genetic architecture of complex traits in _Oryza sativa_. Nature Communications, 2(1), 467. https://doi.org/10.1038/ncomms1467
 
 

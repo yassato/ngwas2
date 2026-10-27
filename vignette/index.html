@@ -1291,6 +1291,8 @@ genotypic identity</a></h2>
       </ul></li>
       <li><a href="#tips" id="toc-tips">Tips</a>
       <ul>
+      <li><a href="#calculating-standard-errors-from-fishers-information-matrix" id="toc-calculating-standard-errors-from-fishers-information-matrix">Calculating
+      standard errors from Fisher’s information matrix</a></li>
       <li><a href="#initial-parameters-of-the-kernel-weights" id="toc-initial-parameters-of-the-kernel-weights">Initial
       parameters of the kernel weights</a></li>
       <li><a href="#covariance-with-fixed-kernel-weights" id="toc-covariance-with-fixed-kernel-weights">Covariance with
@@ -1348,7 +1350,10 @@ the ordinal genomic relatedness matrix (GRM), while the latter kernel
 \mathbf{X}_\text{2}\mathbf{X}_\text{2}^\mathsf{T}\)</span> represents
 global allelic similarity whose elements are defined as <span class="math inline">\((\mathbf{K}_{2})_{k,l} =
 \sum_{q=1}^Q[(x_{q,k_i}x_{q,l_i}){\sum_{j=1}^{J_k}(x_{q,k_j})\sum_{j=1}^{J_l}(x_{q,l_j})}]/(Q-1)\)</span>
-between local spaces <span class="math inline">\(k\)</span> and <span class="math inline">\(l\)</span>.</p>
+between local spaces <span class="math inline">\(k\)</span> and <span class="math inline">\(l\)</span>. Unless otherwise defined, the
+residuals follows a univariate normal distribution without covariance as
+<span class="math inline">\(\mathbf{e} \sim \text{N(}
+\mathbf{0},\sigma^2_\text{e}\mathbf{I}\text{)}\)</span>.</p>
 </div>
 <div id="model-1-2-the-proposed-joint-model" class="section level3">
 <h3>Model 1-2: The proposed joint model</h3>
@@ -1379,7 +1384,7 @@ e_{k_i}\]</span></p>
 \mathbf{K}_\text{12} \\
   \rho_{12}\sigma_1\sigma_2 \mathbf{K}_\text{21} &amp;  \sigma^2_2
 \mathbf{K}_\text{2}
-  \end{array} \right) ]~~~\text{(Eq. 1).}\]</span></p>
+  \end{array} \right) ]~~~\text{(Eq. 1-2).}\]</span></p>
 <p>The random effects follow a multi-variate normal (MVN) distribution
 that considers the covariance <span class="math inline">\(\rho_{12}\sigma_1\sigma_2\)</span> between DGEs
 and IGEs. The off-diagonal kernels <span class="math inline">\(\mathbf{K}_\text{12} =
@@ -1436,7 +1441,7 @@ covariance.</p>
 <h3>Model 3-1: Modified Neighbor GWAS model</h3>
 <p>The fifth model corresponds to the modified Neighbor GWAS model that
 incorporates asymmetric effects between focal and neighboring genotypes
-(Sato et al. 2023, 2025).</p>
+(Sato et al. 2023, 2026).</p>
 <p><span class="math display">\[y_{k_i} = \beta_0 + \beta_{q,\text{s}}
 x_{q,k_i} + \beta_{q,\text{n}} \sum_{k_j=1}^J{x_{q,k_j}}/J_k +
 \beta_{q,\text{s×n}} \sum_{k_j=1}^J{(x_{q,k_i} x_{q,k_j})}/J_k + u_{k_i}
@@ -2075,26 +2080,57 @@ plot of <span class="math inline">\(\beta_{12}\)</span> for Model
 </div>
 <div id="tips" class="section level1">
 <h1>Tips</h1>
+<div id="calculating-standard-errors-from-fishers-information-matrix" class="section level2">
+<h2>Calculating standard errors from Fisher’s information matrix</h2>
+<p>We can calculate asymptotic standard errors (SEs) for (co)variance
+parameters using the inverse of the information matrix (cf. Searle et
+al. 1992). These methods are implemented as <code>calcParamSE</code> and
+<code>calcParamSE.cov</code> functions for the mixed models with and
+without covariance, respectively.</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a>EM3.SE.res <span class="ot">&lt;-</span> <span class="fu">calcParamSE</span>(<span class="at">y =</span> pheno.mat,</span>
+<span id="cb65-2"><a href="#cb65-2" tabindex="-1"></a>                          <span class="at">MM.res =</span> EM3.res11,</span>
+<span id="cb65-3"><a href="#cb65-3" tabindex="-1"></a>                          <span class="at">ZETA =</span> ZETA1,</span>
+<span id="cb65-4"><a href="#cb65-4" tabindex="-1"></a>                          <span class="at">X0 =</span> <span class="cn">NULL</span>,</span>
+<span id="cb65-5"><a href="#cb65-5" tabindex="-1"></a>                          <span class="at">REML =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb65-6"><a href="#cb65-6" tabindex="-1"></a>EM3cov.SE.res <span class="ot">&lt;-</span> <span class="fu">calcParamSE.cov</span>(<span class="at">y =</span> pheno.mat,</span>
+<span id="cb65-7"><a href="#cb65-7" tabindex="-1"></a>                                 <span class="at">EM3.cov.res =</span> EM3.res12,</span>
+<span id="cb65-8"><a href="#cb65-8" tabindex="-1"></a>                                 <span class="at">ZETA =</span> ZETA1,</span>
+<span id="cb65-9"><a href="#cb65-9" tabindex="-1"></a>                                 <span class="at">covList =</span> covList1,</span>
+<span id="cb65-10"><a href="#cb65-10" tabindex="-1"></a>                                 <span class="at">X0 =</span> <span class="cn">NULL</span>,</span>
+<span id="cb65-11"><a href="#cb65-11" tabindex="-1"></a>                                 <span class="at">REML =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb65-12"><a href="#cb65-12" tabindex="-1"></a></span>
+<span id="cb65-13"><a href="#cb65-13" tabindex="-1"></a><span class="fu">print</span>(EM3.SE.res<span class="sc">$</span>parameterTable)</span></code></pre></div>
+<pre><code>##    Parameter              Type  Estimate        SE
+## 1   sigma2.A          Variance 212.00991 34.980458
+## 2 sigma2.Int          Variance   0.00000  4.858902
+## 3         Ve Residual variance  39.50985  6.743081</code></pre>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a><span class="fu">print</span>(EM3cov.SE.res<span class="sc">$</span>parameterTable)</span></code></pre></div>
+<pre><code>##    Parameter              Type    Estimate        SE
+## 1   sigma2.A          Variance 210.5001881 34.880750
+## 2  rho.A.Int       Correlation   1.0558697  4.766910
+## 3 sigma2.Int          Variance   0.6727275  5.470567
+## 4         Ve Residual variance  39.5127936  6.784326</code></pre>
+</div>
 <div id="initial-parameters-of-the-kernel-weights" class="section level2">
 <h2>Initial parameters of the kernel weights</h2>
 <p>In the default setting, initial parameters are given to the kernel
 weights as (1 / no. of kernels) in <code>EM3.cov</code> function. These
 initial parameters can be defined by users with
 <code>parInitForWeights</code> option.</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a>EM3.res11 <span class="ot">&lt;-</span> <span class="fu">EM3.cpp</span>(<span class="at">y =</span> pheno.mat,</span>
-<span id="cb65-2"><a href="#cb65-2" tabindex="-1"></a>                     <span class="at">X0 =</span> <span class="cn">NULL</span>,</span>
-<span id="cb65-3"><a href="#cb65-3" tabindex="-1"></a>                     <span class="at">ZETA =</span> ZETA1)</span>
-<span id="cb65-4"><a href="#cb65-4" tabindex="-1"></a>w <span class="ot">&lt;-</span> EM3.res11<span class="sc">$</span>weights</span>
-<span id="cb65-5"><a href="#cb65-5" tabindex="-1"></a>EM3.res12 <span class="ot">&lt;-</span> <span class="fu">EM3.cov</span>(<span class="at">y =</span> pheno.mat,</span>
-<span id="cb65-6"><a href="#cb65-6" tabindex="-1"></a>                     <span class="at">X0 =</span> <span class="cn">NULL</span>,</span>
-<span id="cb65-7"><a href="#cb65-7" tabindex="-1"></a>                     <span class="at">ZETA =</span> ZETA1,</span>
-<span id="cb65-8"><a href="#cb65-8" tabindex="-1"></a>                     <span class="at">parInitForWeights =</span> w,</span>
-<span id="cb65-9"><a href="#cb65-9" tabindex="-1"></a>                     <span class="at">covList =</span> covList1)</span>
-<span id="cb65-10"><a href="#cb65-10" tabindex="-1"></a></span>
-<span id="cb65-11"><a href="#cb65-11" tabindex="-1"></a><span class="fu">print</span>(w); <span class="fu">print</span>(EM3.res12<span class="sc">$</span>weights) <span class="co"># weights remain the same</span></span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" tabindex="-1"></a>EM3.res11 <span class="ot">&lt;-</span> <span class="fu">EM3.cpp</span>(<span class="at">y =</span> pheno.mat,</span>
+<span id="cb69-2"><a href="#cb69-2" tabindex="-1"></a>                     <span class="at">X0 =</span> <span class="cn">NULL</span>,</span>
+<span id="cb69-3"><a href="#cb69-3" tabindex="-1"></a>                     <span class="at">ZETA =</span> ZETA1)</span>
+<span id="cb69-4"><a href="#cb69-4" tabindex="-1"></a>w <span class="ot">&lt;-</span> EM3.res11<span class="sc">$</span>weights</span>
+<span id="cb69-5"><a href="#cb69-5" tabindex="-1"></a>EM3.res12 <span class="ot">&lt;-</span> <span class="fu">EM3.cov</span>(<span class="at">y =</span> pheno.mat,</span>
+<span id="cb69-6"><a href="#cb69-6" tabindex="-1"></a>                     <span class="at">X0 =</span> <span class="cn">NULL</span>,</span>
+<span id="cb69-7"><a href="#cb69-7" tabindex="-1"></a>                     <span class="at">ZETA =</span> ZETA1,</span>
+<span id="cb69-8"><a href="#cb69-8" tabindex="-1"></a>                     <span class="at">parInitForWeights =</span> w,</span>
+<span id="cb69-9"><a href="#cb69-9" tabindex="-1"></a>                     <span class="at">covList =</span> covList1)</span>
+<span id="cb69-10"><a href="#cb69-10" tabindex="-1"></a></span>
+<span id="cb69-11"><a href="#cb69-11" tabindex="-1"></a><span class="fu">print</span>(w); <span class="fu">print</span>(EM3.res12<span class="sc">$</span>weights) <span class="co"># weights remain the same</span></span></code></pre></div>
 <pre><code>## [1] 1 0</code></pre>
 <pre><code>## [1] 1 0</code></pre>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" tabindex="-1"></a><span class="fu">print</span>(EM3.res12<span class="sc">$</span>rhosMat[<span class="dv">1</span>,<span class="dv">2</span>]) <span class="co"># covariance estimated as 0 due to w = c(1,0)</span></span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" tabindex="-1"></a><span class="fu">print</span>(EM3.res12<span class="sc">$</span>rhosMat[<span class="dv">1</span>,<span class="dv">2</span>]) <span class="co"># covariance estimated as 0 due to w = c(1,0)</span></span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 </div>
 <div id="covariance-with-fixed-kernel-weights" class="section level2">
@@ -2103,18 +2139,18 @@ initial parameters can be defined by users with
 to estimate, we may fix the kernel weights by setting
 <code>optimizeWeights = FALSE</code> (whose default is
 <code>TRUE</code>) as follows.</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" tabindex="-1"></a>EM3.res11 <span class="ot">&lt;-</span> <span class="fu">EM3.cpp</span>(<span class="at">y =</span> pheno.mat,</span>
-<span id="cb70-2"><a href="#cb70-2" tabindex="-1"></a>                     <span class="at">X0 =</span> <span class="cn">NULL</span>,</span>
-<span id="cb70-3"><a href="#cb70-3" tabindex="-1"></a>                     <span class="at">ZETA =</span> ZETA1)</span>
-<span id="cb70-4"><a href="#cb70-4" tabindex="-1"></a>w <span class="ot">&lt;-</span> EM3.res11<span class="sc">$</span>weights</span>
-<span id="cb70-5"><a href="#cb70-5" tabindex="-1"></a>EM3.res12 <span class="ot">&lt;-</span> <span class="fu">EM3.cov</span>(<span class="at">y =</span> pheno.mat,</span>
-<span id="cb70-6"><a href="#cb70-6" tabindex="-1"></a>                     <span class="at">X0 =</span> <span class="cn">NULL</span>,</span>
-<span id="cb70-7"><a href="#cb70-7" tabindex="-1"></a>                     <span class="at">ZETA =</span> ZETA1,</span>
-<span id="cb70-8"><a href="#cb70-8" tabindex="-1"></a>                     <span class="at">optimizeWeights =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb70-9"><a href="#cb70-9" tabindex="-1"></a>                     <span class="at">parInitForWeights =</span> w,</span>
-<span id="cb70-10"><a href="#cb70-10" tabindex="-1"></a>                     <span class="at">covList =</span> covList1)</span>
-<span id="cb70-11"><a href="#cb70-11" tabindex="-1"></a></span>
-<span id="cb70-12"><a href="#cb70-12" tabindex="-1"></a><span class="fu">print</span>(EM3.res12<span class="sc">$</span>rhosMat[<span class="dv">1</span>,<span class="dv">2</span>]) <span class="co"># the same as above due to w = c(1,0)</span></span></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" tabindex="-1"></a>EM3.res11 <span class="ot">&lt;-</span> <span class="fu">EM3.cpp</span>(<span class="at">y =</span> pheno.mat,</span>
+<span id="cb74-2"><a href="#cb74-2" tabindex="-1"></a>                     <span class="at">X0 =</span> <span class="cn">NULL</span>,</span>
+<span id="cb74-3"><a href="#cb74-3" tabindex="-1"></a>                     <span class="at">ZETA =</span> ZETA1)</span>
+<span id="cb74-4"><a href="#cb74-4" tabindex="-1"></a>w <span class="ot">&lt;-</span> EM3.res11<span class="sc">$</span>weights</span>
+<span id="cb74-5"><a href="#cb74-5" tabindex="-1"></a>EM3.res12 <span class="ot">&lt;-</span> <span class="fu">EM3.cov</span>(<span class="at">y =</span> pheno.mat,</span>
+<span id="cb74-6"><a href="#cb74-6" tabindex="-1"></a>                     <span class="at">X0 =</span> <span class="cn">NULL</span>,</span>
+<span id="cb74-7"><a href="#cb74-7" tabindex="-1"></a>                     <span class="at">ZETA =</span> ZETA1,</span>
+<span id="cb74-8"><a href="#cb74-8" tabindex="-1"></a>                     <span class="at">optimizeWeights =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb74-9"><a href="#cb74-9" tabindex="-1"></a>                     <span class="at">parInitForWeights =</span> w,</span>
+<span id="cb74-10"><a href="#cb74-10" tabindex="-1"></a>                     <span class="at">covList =</span> covList1)</span>
+<span id="cb74-11"><a href="#cb74-11" tabindex="-1"></a></span>
+<span id="cb74-12"><a href="#cb74-12" tabindex="-1"></a><span class="fu">print</span>(EM3.res12<span class="sc">$</span>rhosMat[<span class="dv">1</span>,<span class="dv">2</span>]) <span class="co"># the same as above due to w = c(1,0)</span></span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 </div>
 <div id="skip-kernel-calculations-in-gwas" class="section level2">
@@ -2125,19 +2161,19 @@ repeating GWAS for multiple traits. Default setting is
 <code>K1 = NULL</code>, <code>K2 = NULL</code>, <code>K12 = NULL</code>,
 and <code>K21 = NULL</code>, which takes plenty of time to run
 <code>tcrossprod</code> function internally.</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" tabindex="-1"></a>GWAS.res12.list <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb72-2"><a href="#cb72-2" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>){</span>
-<span id="cb72-3"><a href="#cb72-3" tabindex="-1"></a>  pheno <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(Rice_pheno[<span class="fu">rownames</span>(x), i, <span class="at">drop =</span> <span class="cn">FALSE</span>])</span>
-<span id="cb72-4"><a href="#cb72-4" tabindex="-1"></a>  GWAS.res12 <span class="ot">&lt;-</span> <span class="fu">covnei_lmm</span>(<span class="at">geno =</span> x,</span>
-<span id="cb72-5"><a href="#cb72-5" tabindex="-1"></a>                      <span class="at">g_nei =</span> xAdj,</span>
-<span id="cb72-6"><a href="#cb72-6" tabindex="-1"></a>                      <span class="at">pheno =</span> pheno,</span>
-<span id="cb72-7"><a href="#cb72-7" tabindex="-1"></a>                      <span class="at">EM3.res12 =</span> EM3.res12,</span>
-<span id="cb72-8"><a href="#cb72-8" tabindex="-1"></a>                      <span class="at">K1 =</span> K.A, <span class="at">K2 =</span> K.Adj, </span>
-<span id="cb72-9"><a href="#cb72-9" tabindex="-1"></a>                      <span class="at">K12 =</span> K12, <span class="at">K21 =</span> K21)</span>
-<span id="cb72-10"><a href="#cb72-10" tabindex="-1"></a>  GWAS.res12.list <span class="ot">&lt;-</span> <span class="fu">c</span>(GWAS.res12.list, <span class="fu">list</span>(GWAS.res12))</span>
-<span id="cb72-11"><a href="#cb72-11" tabindex="-1"></a>}</span>
-<span id="cb72-12"><a href="#cb72-12" tabindex="-1"></a></span>
-<span id="cb72-13"><a href="#cb72-13" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">data.frame</span>(map,GWAS.res12.list[[<span class="dv">1</span>]]))</span></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" tabindex="-1"></a>GWAS.res12.list <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb76-2"><a href="#cb76-2" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>){</span>
+<span id="cb76-3"><a href="#cb76-3" tabindex="-1"></a>  pheno <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(Rice_pheno[<span class="fu">rownames</span>(x), i, <span class="at">drop =</span> <span class="cn">FALSE</span>])</span>
+<span id="cb76-4"><a href="#cb76-4" tabindex="-1"></a>  GWAS.res12 <span class="ot">&lt;-</span> <span class="fu">covnei_lmm</span>(<span class="at">geno =</span> x,</span>
+<span id="cb76-5"><a href="#cb76-5" tabindex="-1"></a>                      <span class="at">g_nei =</span> xAdj,</span>
+<span id="cb76-6"><a href="#cb76-6" tabindex="-1"></a>                      <span class="at">pheno =</span> pheno,</span>
+<span id="cb76-7"><a href="#cb76-7" tabindex="-1"></a>                      <span class="at">EM3.res12 =</span> EM3.res12,</span>
+<span id="cb76-8"><a href="#cb76-8" tabindex="-1"></a>                      <span class="at">K1 =</span> K.A, <span class="at">K2 =</span> K.Adj, </span>
+<span id="cb76-9"><a href="#cb76-9" tabindex="-1"></a>                      <span class="at">K12 =</span> K12, <span class="at">K21 =</span> K21)</span>
+<span id="cb76-10"><a href="#cb76-10" tabindex="-1"></a>  GWAS.res12.list <span class="ot">&lt;-</span> <span class="fu">c</span>(GWAS.res12.list, <span class="fu">list</span>(GWAS.res12))</span>
+<span id="cb76-11"><a href="#cb76-11" tabindex="-1"></a>}</span>
+<span id="cb76-12"><a href="#cb76-12" tabindex="-1"></a></span>
+<span id="cb76-13"><a href="#cb76-13" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">data.frame</span>(map,GWAS.res12.list[[<span class="dv">1</span>]]))</span></code></pre></div>
 <pre><code>##              marker chr     pos      beta1       beta2    chisq1      chisq2
 ## id1000223 id1000223   1  420422  1.1047248  0.67085261 0.9184187 0.904102913
 ## id1000556 id1000556   1  655693  0.9096194 -0.36720733 0.9211814 0.304358147
@@ -2152,7 +2188,7 @@ and <code>K21 = NULL</code>, which takes plenty of time to run
 ## id1000830 0.71044876 0.3290709
 ## id1000955 0.09782561 0.4246154
 ## id1001073 0.26062128 0.4979975</code></pre>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">data.frame</span>(map,GWAS.res12.list[[<span class="dv">2</span>]]))</span></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">data.frame</span>(map,GWAS.res12.list[[<span class="dv">2</span>]]))</span></code></pre></div>
 <pre><code>##              marker chr     pos      beta1      beta2     chisq1    chisq2
 ## id1000223 id1000223   1  420422 -0.2173537 -0.5249002 0.05926873 0.6593742
 ## id1000556 id1000556   1  655693 -0.2984151 -0.6536274 0.11584653 1.1833809
@@ -2188,9 +2224,11 @@ genome-wide association studies of field herbivory. Heredity, 126(4),
 <li>Sato, Y., Takahashi, Y., Xu, C., &amp; Shimizu, K. K. (2023).
 Detecting frequency-dependent selection through the effects of genotype
 similarity on fitness components. Evolution, 77(4), 1145-1157. <a href="https://doi.org/10.1093/evolut/qpad028" class="uri">https://doi.org/10.1093/evolut/qpad028</a></li>
-<li>Sato, Y. (2025). Negative frequency-dependent selection underlies
-overyielding through neighbor genotypic effects in <em>Arabidopsis
-thaliana</em>. bioRxiv. <a href="https://doi.org/10.1101/2025.05.14.654149" class="uri">https://doi.org/10.1101/2025.05.14.654149</a></li>
+<li>Sato, Y. (2026). Negative frequency-dependent selection underlies
+overyielding through neighbour genotypic effects in Arabidopsis
+thaliana. Philosophical Transactions B, 381(1952), 20250179. <a href="https://doi.org/10.1098/rstb.2025.0179" class="uri">https://doi.org/10.1098/rstb.2025.0179</a></li>
+<li>Searle, S. R., Casella, G., &amp; McCulloch, C. E. (1992). Variance
+Components (1st ed.). Wiley. <a href="https://doi.org/10.1002/9780470316856" class="uri">https://doi.org/10.1002/9780470316856</a></li>
 <li>Zhao, K., Tung, C.-W., Eizenga, G. C., Wright, M. H., Ali, M. L.,
 Price, A. H., Norton, G. J., Islam, M. R., Reynolds, A., Mezey, J.,
 McClung, A. M., Bustamante, C. D., &amp; McCouch, S. R. (2011).
