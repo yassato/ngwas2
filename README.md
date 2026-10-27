@@ -58,6 +58,13 @@ Phenotype data downloaded from Dryad (<https://doi.org/10.5061/dryad.st463>: Bar
 1. WisAsp.fam  
 Genotype data in a PLINK format downloaded from Dryad (<https://doi.org/10.5061/dryad.fr045hv>: Barker et al. 2019). 
 
+
+### ./ath
+
+1. calcPVEcov_CHZ.R  
+1. calcPVEcov_JPN.R  
+Scripts for the reanalysis of the herbivory data on _Arabidopsis thaliana_ in Switzerland (CHZ) and Japan (JPN) (Sato et al. 2024). Input data are available at Zenodo (<https://doi.org/10.5281/zenodo.7945317>).  
+
 ### ./grape
 1. Flutre2022data
 - DLVitis_genotype-identifiers.tsv
@@ -93,3 +100,4 @@ _RStudio project for this repository_
 - Jung, M., Quesada-Traver, C., Roth, M., Aranzana, M. J., Muranty, H., Rymenants, M., Guerra, W., Holzknecht, E., Pradas, N., Lozano, L., Didelot, F., Laurens, F., Yates, S., Studer, B., Broggini, G. A. L., & Patocchi, A. (2025). Integrative multi-environmental genomic prediction in apple. Horticulture Research, 12(2), uhae319. https://doi.org/10.1093/hr/uhae319
 - Riehl, J. F. L., Cole, C. T., Morrow, C. J., Barker, H. L., Bernhardsson, C., Rubert‐Nason, K., Ingvarsson, P. K., & Lindroth, R. L. (2023). Genomic and transcriptomic analyses reveal polygenic architecture for ecologically important traits in aspen (_Populus tremuloides_ Michx.). Ecology and Evolution, 13(10), e10541. https://doi.org/10.1002/ece3.10541
 - Sato, Y., Takahashi, Y., Xu, C., & Shimizu, K. K. (2023). Detecting frequency-dependent selection through the effects of genotype similarity on fitness components. Evolution, 77(4), 1145–1157. https://doi.org/10.1093/evolut/qpad028  
+- Sato, Y., Shimizu-Inatsugi, R., Takeda, K., Schmid, B., Nagano, A. J., & Shimizu, K. K. (2024). Reducing herbivory in mixed planting by genomic prediction of neighbor effects in the field. Nature Communications, 15(1), 8467. https://doi.org/10.1038/s41467-024-52374-7  
